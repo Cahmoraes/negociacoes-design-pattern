@@ -24,8 +24,4 @@ export class Negotiation {
   get volume(): number {
     return this._amount * this._quantity
   }
-
-  doThing() {
-    console.log(`My value is ${this._amount}`)
-  }
 }
