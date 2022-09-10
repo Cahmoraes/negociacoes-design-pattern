@@ -9,20 +9,19 @@ export class NegotiationView implements IIObserver<NegotiationList> {
   @domInjector('#negociacoes')
   private readonly element: IElement
 
-  @domInjector('.table')
-  private readonly table: IElement<HTMLTableElement>
-
   constructor() {
-    this.createTable()
+    this.init()
   }
 
   public update(negotiationList: NegotiationList): void {
-    this.print(this.createTableRows(negotiationList.negotiations))
+    const tableRows = this.createTableRows(negotiationList.negotiations)
+    this.print(tableRows)
   }
 
   private print(tableRows: HTMLTableRowElement[]): void {
-    const oldTbodyEl = this.table?.querySelector('tbody')
+    const oldTbodyEl = this.element!.querySelector('tbody')
     const newTbodyEl = document.createElement('tbody')
+
     newTbodyEl.append(...tableRows)
     oldTbodyEl?.replaceWith(newTbodyEl)
   }
@@ -49,11 +48,10 @@ export class NegotiationView implements IIObserver<NegotiationList> {
   private createTableRows(
     negotiations: readonly Negotiation[],
   ): HTMLTableRowElement[] {
-    const tableRows = negotiations.map((negotiation) => {
+    return negotiations.map((negotiation) => {
       const trEl = document.createElement('tr')
 
       trEl.onclick = () => this.handleClick(negotiation)
-
       trEl.innerHTML = /* html */ `
         <td>${DateFormat.format(negotiation.date)}</td>
         <td>${negotiation.quantity}</td>
@@ -63,11 +61,13 @@ export class NegotiationView implements IIObserver<NegotiationList> {
 
       return trEl
     })
-
-    return tableRows
   }
 
   private handleClick(negotiation: Negotiation) {
     console.log(negotiation)
+  }
+
+  private init() {
+    this.createTable()
   }
 }
