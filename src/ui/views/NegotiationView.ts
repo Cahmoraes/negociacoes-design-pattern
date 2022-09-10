@@ -1,11 +1,11 @@
 import { domInjector } from '../../util/decorators/domInjector'
 import type { IElement } from '../../interface/IElement'
 import { IIObserver } from '../../interface/IObserver'
-import { NegotiationList } from '../../domain/NegotiationList'
 import { Negotiation } from '../../domain/Negotiation'
 import { DateFormat } from '../../util/DateFormat'
+import { INegotiationListAction } from '../../interface/INegotiationListAction'
 
-export class NegotiationView implements IIObserver<NegotiationList> {
+export class NegotiationView implements IIObserver<INegotiationListAction> {
   @domInjector('#negociacoes')
   private readonly element: IElement
 
@@ -13,8 +13,8 @@ export class NegotiationView implements IIObserver<NegotiationList> {
     this.init()
   }
 
-  public update(negotiationList: NegotiationList): void {
-    const tableRows = this.createTableRows(negotiationList.negotiations)
+  public update({ data }: INegotiationListAction): void {
+    const tableRows = this.createTableRows(data.negotiations)
     this.print(tableRows)
   }
 

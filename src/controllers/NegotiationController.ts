@@ -5,7 +5,7 @@ import {
   ValidateDateMiddleware,
   ValidateQuantityMiddleware,
 } from '../ui/validator'
-import { NegotiationView } from '../ui/views/NegotiationView'
+import { MessageView, NegotiationView } from '../ui/views'
 import { domInjector } from '../util/decorators'
 import { DateFormat } from '../util'
 
@@ -27,10 +27,12 @@ export class NegotiationController {
 
   private readonly negotiationsList: NegotiationList
   private readonly negotiationView: NegotiationView
+  private readonly messageView: MessageView
 
   constructor() {
     this.negotiationsList = new NegotiationList()
     this.negotiationView = new NegotiationView()
+    this.messageView = new MessageView()
     this.init()
   }
 
@@ -85,5 +87,6 @@ export class NegotiationController {
     this.bindEvent()
     this.addEvents()
     this.negotiationsList.subscribe(this.negotiationView)
+    this.negotiationsList.subscribe(this.messageView)
   }
 }
