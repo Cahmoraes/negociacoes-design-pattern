@@ -3,7 +3,6 @@ import { Negotiation } from './Negotiation'
 
 export class NegotiationList {
   private readonly _negotiations: Negotiation[] = []
-
   private observers = new Set<IIObserver<this>>()
 
   get negotiations(): readonly Negotiation[] {

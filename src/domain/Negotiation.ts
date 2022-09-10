@@ -24,4 +24,14 @@ export class Negotiation {
   get volume(): number {
     return this._amount * this._quantity
   }
+
+  public isEqual(negotiation: Negotiation): boolean {
+    return (
+      this.date.getDate() === negotiation.date.getDate() &&
+      this.date.getMonth() === negotiation.date.getMonth() &&
+      this.date.getFullYear() === negotiation.date.getFullYear() &&
+      this.amount === negotiation.amount &&
+      this.quantity === negotiation.quantity
+    )
+  }
 }

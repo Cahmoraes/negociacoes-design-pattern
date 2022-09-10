@@ -6,6 +6,7 @@ import { ValidateDateMiddleware } from '../ui/validator/ValidateDateMiddleware'
 import { ValidateQuantityMiddleware } from '../ui/validator/ValidateQuantityMiddleware'
 import { NegotiationView } from '../ui/views/NegotiationView'
 import { domInjector } from '../util/decorators/domInjector'
+import { DateFormat } from '../util/DateFormat'
 
 export class NegotiationController {
   @domInjector('#data')
@@ -39,11 +40,10 @@ export class NegotiationController {
 
   private create(): Negotiation {
     const negotiation = new Negotiation(
-      new Date(this.inputData!.value),
+      DateFormat.toDate(this.inputData!.value),
       parseInt(this.inputQuantity!.value),
       parseFloat(this.inputAmount!.value),
     )
-
     return negotiation
   }
 
