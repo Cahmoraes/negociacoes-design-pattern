@@ -19,7 +19,10 @@ export class NegotiationList {
   }
 
   public clear(): void {
+    if (this._negotiations.length === 0) return
+
     this._negotiations.length = 0
+    this.notify()
   }
 
   public subscribe(observer: IIObserver<this>): void {

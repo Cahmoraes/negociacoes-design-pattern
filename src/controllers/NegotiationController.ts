@@ -19,6 +19,9 @@ export class NegotiationController {
   @domInjector('#valor')
   private inputAmount: IElement<HTMLInputElement>
 
+  @domInjector('#botao-apaga')
+  private clearButton: IElement<HTMLButtonElement>
+
   private readonly negotiationsList: NegotiationList
   private readonly negotiationView: NegotiationView
 
@@ -58,7 +61,21 @@ export class NegotiationController {
     return validator.handle(negotiation)
   }
 
+  private addEvents() {
+    this.clearButton?.addEventListener('click', this.clearNegotiationList)
+  }
+
+  private bindEvent() {
+    this.clearNegotiationList = this.clearNegotiationList.bind(this)
+  }
+
+  private clearNegotiationList() {
+    this.negotiationsList.clear()
+  }
+
   private init() {
+    this.bindEvent()
+    this.addEvents()
     this.negotiationsList.subscribe(this.negotiationView)
   }
 }
