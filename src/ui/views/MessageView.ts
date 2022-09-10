@@ -11,6 +11,10 @@ export class MessageView implements IIObserver<INegotiationListAction> {
   private element: IElement<HTMLDivElement>
 
   public update({ action }: INegotiationListAction): void {
+    this.print(action)
+  }
+
+  public print(action: NegotiationAction): void {
     this.element!.innerHTML = this.template(action)
   }
 

@@ -7,7 +7,7 @@ import {
 } from '../ui/validator'
 import { MessageView, NegotiationView } from '../ui/views'
 import { domInjector } from '../util/decorators'
-import { DateFormat } from '../util'
+import { ConnectionFactory, DateFormat } from '../util'
 
 export class NegotiationController {
   @domInjector('form')
@@ -68,25 +68,35 @@ export class NegotiationController {
     return validator.handle(negotiation)
   }
 
-  private addEvents() {
+  private addEvents(): void {
     this.form?.addEventListener('submit', this.add)
 
     this.clearButton?.addEventListener('click', this.clearNegotiationList)
   }
 
-  private bindEvent() {
+  private bindEvent(): void {
     this.add = this.add.bind(this)
     this.clearNegotiationList = this.clearNegotiationList.bind(this)
   }
 
-  private clearNegotiationList() {
+  private clearNegotiationList(): void {
     this.negotiationsList.clear()
   }
 
-  private init() {
+  private async getConnection(): Promise<void> {
+    try {
+      const connection = await ConnectionFactory.getConnection()
+      console.log(connection)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  private init(): void {
     this.bindEvent()
     this.addEvents()
     this.negotiationsList.subscribe(this.negotiationView)
     this.negotiationsList.subscribe(this.messageView)
+    this.getConnection()
   }
 }

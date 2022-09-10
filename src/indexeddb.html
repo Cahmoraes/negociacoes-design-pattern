@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      ;(function () {
+        const request = indexedDB.open('CRM', 1)
+
+        request.onerror = (event) => {
+          console.log(`Database error: ${event.target.error}`)
+        }
+
+        request.onsuccess = (event) => {
+          const db = event.target.result
+
+          // insertContact(db, {
+          //   email: 'caique@email.com',
+          //   firstName: 'Caique',
+          //   lasName: 'Moraes',
+          // })
+
+          // insertContact(db, {
+          //   email: 'thomas@email.com',
+          //   firstName: 'Thomas',
+          //   lasName: 'Moraes',
+          // })
+
+          getContactById(db, 1)
+        }
+
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result
+
+          const store = db.createObjectStore('Contacts', {
+            autoIncrement: true,
+          })
+
+          const index = store.createIndex('email', 'email', { unique: true })
+        }
+
+        function insertContact(db, contact) {
+          const txn = db.transaction('Contacts', 'readwrite')
+          const store = txn.objectStore('Contacts')
+          const query = store.put(contact)
+
+          query.onerror = (event) => console.log(event.target.error)
+          query.onsuccess = (event) => console.log(event)
+
+          txn.oncomplete = () => db.close()
+        }
+
+        function getContactById(db, id) {
+          const txn = db.transaction('Contacts', 'readonly')
+          const store = txn.objectStore('Contacts')
+
+          let query = store.get(id)
+
+          query.onsuccess = (event) => {
+            if (!event.target.result) {
+              console.log(`The contact with ${id} not found`)
+            } else {
+              console.table(event.target.result)
+            }
+          }
+
+          query.onerror = (event) => {
+            console.log(event.target.errorCode)
+          }
+
+          txn.oncomplete = function () {
+            db.close()
+          }
+        }
+      })()
+    </script>
+  </body>
+</html>
