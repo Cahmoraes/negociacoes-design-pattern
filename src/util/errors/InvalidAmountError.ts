@@ -1,4 +1,4 @@
-import { ApplicationError } from './ApplicationError'
+import { ApplicationError } from '.'
 
 export class InvalidAmountError extends ApplicationError {
   constructor() {

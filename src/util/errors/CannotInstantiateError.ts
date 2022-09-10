@@ -1,4 +1,4 @@
-import { ApplicationError } from './ApplicationError'
+import { ApplicationError } from '.'
 
 export class CannotInstantiateError extends ApplicationError {
   constructor(name: string) {

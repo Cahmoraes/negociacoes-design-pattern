@@ -1,4 +1,4 @@
-import { ApplicationError } from './ApplicationError'
+import { ApplicationError } from './'
 
 export class InvalidDateError extends ApplicationError {
   constructor() {

@@ -9,48 +9,50 @@ export class NegotiationView implements IIObserver<NegotiationList> {
   @domInjector('#negociacoes')
   private readonly element: IElement
 
-  private table: HTMLTableElement | undefined
+  @domInjector('.table')
+  private readonly table: IElement<HTMLTableElement>
 
   constructor() {
     this.createTable()
   }
 
   public update(negotiationList: NegotiationList): void {
-    this.createTableRows(negotiationList.negotiations)
+    this.print(this.createTableRows(negotiationList.negotiations))
+  }
+
+  private print(tableRows: HTMLTableRowElement[]): void {
+    const oldTbodyEl = this.table?.querySelector('tbody')
+    const newTbodyEl = document.createElement('tbody')
+    newTbodyEl.append(...tableRows)
+    oldTbodyEl?.replaceWith(newTbodyEl)
   }
 
   private createTable() {
-    this.table = document.createElement('table')
-    this.table.classList.add('table', 'table-hover', 'table-bordered')
-    this.table.innerHTML = /* html */ `
-      <thead>
-        <tr>
-          <th>DATA</th>
-          <th>QUANTIDADE</th>
-          <th>VALOR</th>
-          <th>VOLUME</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-      <tfoot>
-      </tfoot>
+    this.element!.innerHTML = /* html */ `
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>DATA</th>
+            <th>QUANTIDADE</th>
+            <th>VALOR</th>
+            <th>VOLUME</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+        </tfoot>
+      </table>
     `
-
-    this.element?.insertAdjacentElement('beforeend', this.table)
   }
 
-  private createTableRows(negotiations: readonly Negotiation[]) {
-    const oldTbodyEl = this.table?.querySelector('tbody')
-    const newTbodyEl = document.createElement('tbody')
-    const fragmentEl = document.createDocumentFragment()
-
-    for (const negotiation of negotiations) {
+  private createTableRows(
+    negotiations: readonly Negotiation[],
+  ): HTMLTableRowElement[] {
+    const tableRows = negotiations.map((negotiation) => {
       const trEl = document.createElement('tr')
 
-      trEl.onclick = () => {
-        console.log(negotiation)
-      }
+      trEl.onclick = () => this.handleClick(negotiation)
 
       trEl.innerHTML = /* html */ `
         <td>${DateFormat.format(negotiation.date)}</td>
@@ -59,32 +61,13 @@ export class NegotiationView implements IIObserver<NegotiationList> {
         <td>${negotiation.volume}</td>
       `
 
-      fragmentEl.appendChild(trEl)
-    }
-    newTbodyEl.appendChild(fragmentEl)
-    oldTbodyEl?.replaceWith(newTbodyEl)
+      return trEl
+    })
+
+    return tableRows
   }
 
-  private template(negotiations: readonly Negotiation[]): string {
-    return /* html */ `
-      <tr>
-        ${negotiations
-          .map(
-            ({ date, quantity, amount, volume }) => /* html */ `
-            <tr>
-              <td>${DateFormat.format(date)}</td>
-              <td>${quantity}</td>
-              <td>${amount}</td>
-              <td>${volume}</td>
-            </tr>
-        `,
-          )
-          .join('')}
-      </tr>
-    `
-  }
-
-  private handleClick(quantity: number) {
-    console.log({ quantity })
+  private handleClick(negotiation: Negotiation) {
+    console.log(negotiation)
   }
 }

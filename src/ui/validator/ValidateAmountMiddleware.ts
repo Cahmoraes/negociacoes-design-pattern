@@ -1,6 +1,6 @@
 import { Negotiation } from '../../domain/Negotiation'
 import { InvalidAmountError } from '../../util/errors/InvalidAmountError'
-import { ValidateMiddleware } from './ValidateMiddleware'
+import { ValidateMiddleware } from '.'
 
 export class ValidateAmountMiddleware extends ValidateMiddleware<Negotiation> {
   handle(data: Negotiation): boolean {

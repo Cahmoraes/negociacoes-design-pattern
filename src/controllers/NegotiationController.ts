@@ -1,22 +1,23 @@
-import { Negotiation } from '../domain/Negotiation'
-import { NegotiationList } from '../domain/NegotiationList'
-import type { IElement } from '../interface/IElement'
-import { ValidateAmountMiddleware } from '../ui/validator/ValidateAmountMiddleware'
-import { ValidateDateMiddleware } from '../ui/validator/ValidateDateMiddleware'
-import { ValidateQuantityMiddleware } from '../ui/validator/ValidateQuantityMiddleware'
+import { Negotiation, NegotiationList } from '../domain'
+import type { IElement } from '../interface'
+import {
+  ValidateAmountMiddleware,
+  ValidateDateMiddleware,
+  ValidateQuantityMiddleware,
+} from '../ui/validator'
 import { NegotiationView } from '../ui/views/NegotiationView'
-import { domInjector } from '../util/decorators/domInjector'
-import { DateFormat } from '../util/DateFormat'
+import { domInjector } from '../util/decorators'
+import { DateFormat } from '../util'
 
 export class NegotiationController {
   @domInjector('#data')
-  private inputData: IElement
+  private inputData: IElement<HTMLInputElement>
 
   @domInjector('#quantidade')
-  private inputQuantity: IElement
+  private inputQuantity: IElement<HTMLInputElement>
 
   @domInjector('#valor')
-  private inputAmount: IElement
+  private inputAmount: IElement<HTMLInputElement>
 
   private readonly negotiationsList: NegotiationList
   private readonly negotiationView: NegotiationView

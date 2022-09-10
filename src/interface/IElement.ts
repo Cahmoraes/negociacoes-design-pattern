@@ -1,1 +1,1 @@
-export type IElement = HTMLInputElement | undefined
+export type IElement<T = HTMLElement> = T | undefined
