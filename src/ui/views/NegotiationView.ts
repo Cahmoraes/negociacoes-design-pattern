@@ -9,7 +9,6 @@ export class NegotiationView implements IIObserver<NegotiationList> {
   @domInjector('#negociacoes')
   private readonly element: IElement
 
-  private negotiations: Negotiation[] = []
   private table: HTMLTableElement | undefined
 
   constructor() {
@@ -17,7 +16,7 @@ export class NegotiationView implements IIObserver<NegotiationList> {
   }
 
   public update(negotiationList: NegotiationList): void {
-    this.createRow(this.filterNegotiations(negotiationList.negotiations))
+    this.createTableRows(negotiationList.negotiations)
   }
 
   private createTable() {
@@ -41,22 +40,9 @@ export class NegotiationView implements IIObserver<NegotiationList> {
     this.element?.insertAdjacentElement('beforeend', this.table)
   }
 
-  private filterNegotiations(
-    negotiations: readonly Negotiation[],
-  ): readonly Negotiation[] {
-    const filteredNegotiations = negotiations.filter(
-      (newNegotiations) =>
-        !this.negotiations.some((negotiation) =>
-          negotiation.isEqual(newNegotiations),
-        ),
-    )
-
-    this.negotiations = [...this.negotiations, ...filteredNegotiations]
-    return filteredNegotiations
-  }
-
-  private createRow(negotiations: readonly Negotiation[]) {
-    const tbodyEl = this.table?.querySelector('tbody')
+  private createTableRows(negotiations: readonly Negotiation[]) {
+    const oldTbodyEl = this.table?.querySelector('tbody')
+    const newTbodyEl = document.createElement('tbody')
     const fragmentEl = document.createDocumentFragment()
 
     for (const negotiation of negotiations) {
@@ -75,8 +61,8 @@ export class NegotiationView implements IIObserver<NegotiationList> {
 
       fragmentEl.appendChild(trEl)
     }
-
-    tbodyEl?.appendChild(fragmentEl)
+    newTbodyEl.appendChild(fragmentEl)
+    oldTbodyEl?.replaceWith(newTbodyEl)
   }
 
   private template(negotiations: readonly Negotiation[]): string {
