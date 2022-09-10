@@ -10,6 +10,10 @@ export class NegotiationList {
   }
 
   public add(negotiation: Negotiation): void {
+    if (this.isDuplicate(negotiation)) {
+      return
+    }
+
     this._negotiations.push(negotiation)
     this.notify()
   }
@@ -28,5 +32,11 @@ export class NegotiationList {
 
   private notify(): void {
     this.observers.forEach((observer) => observer.update(this))
+  }
+
+  private isDuplicate(negotiation: Negotiation): boolean {
+    return this.negotiations.some((existingNegotiation) =>
+      existingNegotiation.isEqual(negotiation),
+    )
   }
 }

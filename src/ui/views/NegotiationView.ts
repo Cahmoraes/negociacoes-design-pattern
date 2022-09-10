@@ -26,7 +26,7 @@ export class NegotiationView implements IIObserver<NegotiationList> {
     oldTbodyEl?.replaceWith(newTbodyEl)
   }
 
-  private createTable() {
+  private createTable(): void {
     this.element!.innerHTML = /* html */ `
       <table class="table table-hover table-bordered">
         <thead>
@@ -63,11 +63,11 @@ export class NegotiationView implements IIObserver<NegotiationList> {
     })
   }
 
-  private handleClick(negotiation: Negotiation) {
+  private handleClick(negotiation: Negotiation): void {
     console.log(negotiation)
   }
 
-  private init() {
+  private init(): void {
     this.createTable()
   }
 }
