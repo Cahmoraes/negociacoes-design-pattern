@@ -17,10 +17,19 @@ export class MessageView implements IIObserver<INegotiationListAction> {
   private template(action: NegotiationAction) {
     return action
       ? /* html */ `
-    <p class="alert alert-info">${action}</p>
+    ${templateStrategy(action)}
     `
       : /* html */ `
     <p></p>
     `
   }
+}
+
+function templateStrategy(strategy: NegotiationAction) {
+  const strategyMap: Record<NegotiationAction, string> = {
+    ADD: /* html */ `<p class="alert alert-info">Negociação salva com sucesso</p>`,
+    CLEAR: /* html */ `<p class="alert alert-info">Negociações apagadas</p>`,
+  }
+
+  return strategyMap[strategy]
 }
