@@ -5,7 +5,6 @@ export class ConnectionFactory {
   private static dbName = 'cahmoaes@negotiations'
   private static stores = ['negotiation']
   private static version = 1
-  private static closeFn: () => void
 
   constructor() {
     throw new CannotInstantiateError(ConnectionFactory.constructor.name)
@@ -27,11 +26,6 @@ export class ConnectionFactory {
       openRequest.onsuccess = (event: Event) => {
         const dbRequest = event.target as IDBOpenDBRequest
         this.connection = dbRequest.result
-        this.closeFn = this.connection.close
-
-        this.connection.close = () => {
-          throw new Error('Você não pode fachar a conexão diretamente')
-        }
 
         resolve(this.connection)
       }
@@ -41,14 +35,6 @@ export class ConnectionFactory {
         reject(dbRequest.error?.message)
       }
     })
-  }
-
-  public static closeConnection(): boolean {
-    if (this.connection) {
-      Reflect.apply(this.closeFn, this.connection, [])
-      return true
-    }
-    return false
   }
 
   private static createStores(connection: IDBDatabase): void {

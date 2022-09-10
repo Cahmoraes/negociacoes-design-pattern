@@ -8,6 +8,7 @@ import {
 import { MessageView, NegotiationView } from '../ui/views'
 import { domInjector } from '../util/decorators'
 import { ConnectionFactory, DateFormat } from '../util'
+import { NegotiationDao } from '../domain/NegotiationDao'
 
 export class NegotiationController {
   @domInjector('form')
@@ -28,20 +29,25 @@ export class NegotiationController {
   private readonly negotiationsList: NegotiationList
   private readonly negotiationView: NegotiationView
   private readonly messageView: MessageView
+  private connection: IDBDatabase | null
+  private negotiationDao: NegotiationDao | null
 
   constructor() {
     this.negotiationsList = new NegotiationList()
     this.negotiationView = new NegotiationView()
     this.messageView = new MessageView()
+    this.connection = null
+    this.negotiationDao = null
     this.init()
   }
 
-  public add(event: Event): void {
+  public async add(event: Event): Promise<void> {
     event.preventDefault()
 
     try {
       const negotiation = this.create()
       if (this.validate(negotiation)) {
+        await this.negotiationDao?.add(negotiation)
         this.negotiationsList.add(negotiation)
       }
     } catch (error) {
@@ -85,8 +91,12 @@ export class NegotiationController {
 
   private async getConnection(): Promise<void> {
     try {
-      const connection = await ConnectionFactory.getConnection()
-      console.log(connection)
+      this.connection = await ConnectionFactory.getConnection()
+      this.negotiationDao = new NegotiationDao(this.connection)
+
+      const result = await this.negotiationDao.getAll()
+      console.log(result)
+      console.log(this.connection)
     } catch (error) {
       console.log(error)
     }
