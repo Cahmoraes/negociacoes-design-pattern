@@ -10,6 +10,9 @@ import { domInjector } from '../util/decorators'
 import { DateFormat } from '../util'
 
 export class NegotiationController {
+  @domInjector('form')
+  private form: IElement<HTMLFormElement>
+
   @domInjector('#data')
   private inputData: IElement<HTMLInputElement>
 
@@ -31,7 +34,9 @@ export class NegotiationController {
     this.init()
   }
 
-  public add(): void {
+  public add(event: Event): void {
+    event.preventDefault()
+
     try {
       const negotiation = this.create()
       if (this.validate(negotiation)) {
@@ -62,10 +67,13 @@ export class NegotiationController {
   }
 
   private addEvents() {
+    this.form?.addEventListener('submit', this.add)
+
     this.clearButton?.addEventListener('click', this.clearNegotiationList)
   }
 
   private bindEvent() {
+    this.add = this.add.bind(this)
     this.clearNegotiationList = this.clearNegotiationList.bind(this)
   }
 
