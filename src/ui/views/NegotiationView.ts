@@ -79,9 +79,10 @@ export class NegotiationView implements IIObserver<INegotiationListAction> {
     return deleteButtonEl
   }
 
-  private handleDeleteNegotiation(negotiation: Negotiation): void {
+  private handleDeleteNegotiation(negotiation: Negotiation): Negotiation {
     console.log(negotiation)
     this.negotiationList?.delete(negotiation)
+    return negotiation
   }
 
   private init(): void {

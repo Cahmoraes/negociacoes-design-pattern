@@ -7,7 +7,7 @@ import {
 } from '../ui/validator'
 import { MessageView, NegotiationView } from '../ui/views'
 import { domInjector } from '../util/decorators'
-import { DateFormat, DaoFactory } from '../util'
+import { DateFormat, DaoFactory, ProxyFactory } from '../util'
 
 export class NegotiationController {
   @domInjector('form')
@@ -32,8 +32,14 @@ export class NegotiationController {
 
   constructor() {
     this.negotiationsList = new NegotiationList()
-    this.negotiationView = new NegotiationView()
     this.messageView = new MessageView()
+
+    this.negotiationView = ProxyFactory.create(
+      new NegotiationView(),
+      (negotiation: Negotiation) => this.delete(negotiation),
+      'handleDeleteNegotiation',
+    )
+
     this.init()
   }
 
@@ -110,5 +116,10 @@ export class NegotiationController {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  private delete(negotiation: Negotiation): void {
+    console.log('Deleting negotiation')
+    console.log({ negotiation })
   }
 }
