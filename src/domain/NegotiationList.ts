@@ -22,12 +22,16 @@ export class NegotiationList {
     this.notify('ADD')
   }
 
-  public import(negotiation: Negotiation): void {
-    if (this.isDuplicate(negotiation)) {
-      return
-    }
+  public import(negotiations: Negotiation[]): void {
+    negotiations
+      .filter((negotiation) => !this.isDuplicate(negotiation))
+      .forEach((negotiation) => this._negotiations.push(negotiation))
 
-    this._negotiations.push(negotiation)
+    // if (this.isDuplicate(negotiation)) {
+    //   return
+    // }
+
+    // this._negotiations.push(negotiation)
     this.notify('IMPORT')
   }
 
