@@ -1,4 +1,4 @@
-import { Negotiation, NegotiationList } from '../domain'
+import { Negotiation, NegotiationList, NegotiationDao } from '../domain'
 import type { IElement } from '../interface'
 import {
   ValidateAmountMiddleware,
@@ -7,9 +7,7 @@ import {
 } from '../ui/validator'
 import { MessageView, NegotiationView } from '../ui/views'
 import { domInjector } from '../util/decorators'
-import { ConnectionFactory, DateFormat } from '../util'
-import { NegotiationDao } from '../domain/NegotiationDao'
-import { DaoFactory } from '../util/DaoFactory'
+import { DateFormat, DaoFactory } from '../util'
 
 export class NegotiationController {
   @domInjector('form')

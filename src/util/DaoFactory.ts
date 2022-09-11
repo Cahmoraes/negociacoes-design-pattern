@@ -1,5 +1,5 @@
 import { NegotiationDao } from '../domain/NegotiationDao'
-import { ConnectionFactory } from './ConnectionFactory'
+import { ConnectionFactory } from '.'
 
 export class DaoFactory {
   public static async getNegotiationDao(): Promise<NegotiationDao> {
