@@ -64,6 +64,43 @@ export class NegotiationDao {
     })
   }
 
+  public delete(negotiationToDelete: Negotiation): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const transaction = this.connection.transaction(this.store, 'readwrite')
+
+      const cursor = transaction.objectStore(this.store).openCursor()
+
+      cursor.onsuccess = (event) => {
+        const idbRequest = event.target as IDBRequest
+        const cursor = idbRequest.result as IDBCursorWithValue
+
+        if (cursor) {
+          const value = cursor.value as IIDBResponse
+
+          const negotiation = new Negotiation(
+            value._date,
+            value._quantity,
+            value._amount,
+          )
+
+          if (negotiationToDelete.isEqual(negotiation)) {
+            console.log('deletando...')
+            cursor.delete()
+            resolve()
+            return
+          }
+
+          cursor.continue()
+        }
+      }
+
+      cursor.onerror = (event) => {
+        const idbRequest = event.target as IDBRequest
+        reject(idbRequest.error)
+      }
+    })
+  }
+
   private closeTransaction(transaction: IDBTransaction): void {
     transaction.oncomplete = () => this.connection.close()
   }

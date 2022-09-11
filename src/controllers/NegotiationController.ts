@@ -118,8 +118,13 @@ export class NegotiationController {
     }
   }
 
-  private delete(negotiation: Negotiation): void {
+  private async delete(negotiation: Negotiation): Promise<void> {
     console.log('Deleting negotiation')
     console.log({ negotiation })
+    try {
+      this.negotiationDao.delete(negotiation)
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
