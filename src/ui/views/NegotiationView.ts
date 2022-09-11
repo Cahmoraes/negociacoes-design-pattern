@@ -35,6 +35,7 @@ export class NegotiationView implements IIObserver<INegotiationListAction> {
             <th>QUANTIDADE</th>
             <th>VALOR</th>
             <th>VOLUME</th>
+            <th>AÇÃO</th>
           </tr>
         </thead>
         <tbody>
@@ -51,7 +52,6 @@ export class NegotiationView implements IIObserver<INegotiationListAction> {
     return negotiations.map((negotiation) => {
       const trEl = document.createElement('tr')
 
-      trEl.onclick = () => this.handleClick(negotiation)
       trEl.innerHTML = /* html */ `
         <td>${DateFormat.format(negotiation.date)}</td>
         <td>${negotiation.quantity}</td>
@@ -59,11 +59,23 @@ export class NegotiationView implements IIObserver<INegotiationListAction> {
         <td>${negotiation.volume}</td>
       `
 
+      const tdEl = document.createElement('td')
+      const deleteButton = this.createDeleteButton(negotiation)
+
+      tdEl.appendChild(deleteButton)
+      trEl.appendChild(tdEl)
       return trEl
     })
   }
 
-  private handleClick(negotiation: Negotiation): void {
+  private createDeleteButton(negotiation: Negotiation): HTMLButtonElement {
+    const deleteButtonEl = document.createElement('button')
+    deleteButtonEl.textContent = 'Excluir'
+    deleteButtonEl.onclick = () => this.handleDeleteNegotiation(negotiation)
+    return deleteButtonEl
+  }
+
+  private handleDeleteNegotiation(negotiation: Negotiation): void {
     console.log(negotiation)
   }
 
