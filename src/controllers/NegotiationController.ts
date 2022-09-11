@@ -92,8 +92,13 @@ export class NegotiationController {
     this.clearNegotiationList = this.clearNegotiationList.bind(this)
   }
 
-  private clearNegotiationList(): void {
-    this.negotiationsList.clear()
+  private async clearNegotiationList(): Promise<void> {
+    try {
+      this.negotiationsList.clear()
+      await this.negotiationDao.clear()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   private reset(): void {

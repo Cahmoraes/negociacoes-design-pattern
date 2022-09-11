@@ -101,6 +101,24 @@ export class NegotiationDao {
     })
   }
 
+  public clear(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const transaction = this.connection.transaction(this.store, 'readwrite')
+      const store = transaction.objectStore(this.store)
+
+      const request = store.clear()
+
+      request.onsuccess = () => {
+        resolve()
+      }
+
+      request.onerror = (event) => {
+        const idbRequest = event.target as IDBRequest
+        reject(idbRequest.error)
+      }
+    })
+  }
+
   private closeTransaction(transaction: IDBTransaction): void {
     transaction.oncomplete = () => this.connection.close()
   }

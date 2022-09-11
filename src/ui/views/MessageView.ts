@@ -10,12 +10,28 @@ export class MessageView implements IIObserver<INegotiationListAction> {
   @domInjector('#mensagemView')
   private element: IElement<HTMLDivElement>
 
+  private timer = 0
+  private milliseconds = 2000
+
   public update({ action }: INegotiationListAction): void {
     this.print(action)
+    this.setTimer()
   }
 
   public print(action: NegotiationAction): void {
     this.element!.innerHTML = this.template(action)
+  }
+
+  private setTimer() {
+    if (this.timer) clearTimeout(this.timer)
+    this.timer = setTimeout(() => {
+      this.hideMessage()
+      this.timer = 0
+    }, this.milliseconds)
+  }
+
+  private hideMessage() {
+    this.element!.innerHTML = '<p></p>'
   }
 
   private template(action: NegotiationAction) {

@@ -1,5 +1,5 @@
 interface ITrap<K> {
-  (any: K): any
+  (any: K): unknown
 }
 
 export class ProxyFactory {
@@ -10,7 +10,7 @@ export class ProxyFactory {
           ProxyFactory.isFunction(target, prop) &&
           props.includes(String(prop))
         ) {
-          return function (...args: any[]) {
+          return function (...args: unknown[]) {
             const result = Reflect.apply(target[prop], target, args) as K
             trap(result)
             return result
