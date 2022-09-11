@@ -27,11 +27,6 @@ export class NegotiationList {
       .filter((negotiation) => !this.isDuplicate(negotiation))
       .forEach((negotiation) => this._negotiations.push(negotiation))
 
-    // if (this.isDuplicate(negotiation)) {
-    //   return
-    // }
-
-    // this._negotiations.push(negotiation)
     this.notify('IMPORT')
   }
 
@@ -48,6 +43,17 @@ export class NegotiationList {
 
   public unsubscribe(observer: IIObserver<INegotiationListAction>): void {
     this.observers.has(observer) && this.observers.delete(observer)
+  }
+
+  public delete(negotiationToDelete: Negotiation): void {
+    const indexNegotiationToDelete = this._negotiations.findIndex(
+      (negotiation) => negotiation.isEqual(negotiationToDelete),
+    )
+
+    if (indexNegotiationToDelete < 0) return
+
+    this._negotiations.splice(indexNegotiationToDelete, 1)
+    this.notify('DELETE')
   }
 
   private notify(action: NegotiationAction): void {

@@ -4,10 +4,13 @@ import { IIObserver } from '../../interface/IObserver'
 import { Negotiation } from '../../domain/Negotiation'
 import { DateFormat } from '../../util/DateFormat'
 import { INegotiationListAction } from '../../interface/INegotiationListAction'
+import { NegotiationList } from '../../domain'
 
 export class NegotiationView implements IIObserver<INegotiationListAction> {
   @domInjector('#negociacoes')
   private readonly element: IElement
+
+  private negotiationList: NegotiationList | null = null
 
   constructor() {
     this.init()
@@ -15,6 +18,7 @@ export class NegotiationView implements IIObserver<INegotiationListAction> {
 
   public update({ data }: INegotiationListAction): void {
     const tableRows = this.createTableRows(data.negotiations)
+    this.negotiationList = data
     this.print(tableRows)
   }
 
@@ -77,6 +81,7 @@ export class NegotiationView implements IIObserver<INegotiationListAction> {
 
   private handleDeleteNegotiation(negotiation: Negotiation): void {
     console.log(negotiation)
+    this.negotiationList?.delete(negotiation)
   }
 
   private init(): void {

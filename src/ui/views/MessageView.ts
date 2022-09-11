@@ -40,6 +40,9 @@ function templateStrategy(strategy: NegotiationAction) {
     IMPORT: /* html */ `
       <p class="alert alert-info">Negociações Importadas com sucesso</p>
     `,
+    DELETE: /* html */ `
+    <p class="alert alert-info">Negociação deletada com sucesso</p>
+  `,
   }
 
   return strategyMap[strategy]
