@@ -31,8 +31,15 @@ export class MessageView implements IIObserver<INegotiationListAction> {
 
 function templateStrategy(strategy: NegotiationAction) {
   const strategyMap: Record<NegotiationAction, string> = {
-    ADD: /* html */ `<p class="alert alert-info">Negociação salva com sucesso</p>`,
-    CLEAR: /* html */ `<p class="alert alert-info">Negociações apagadas</p>`,
+    ADD: /* html */ `
+      <p class="alert alert-info">Negociação salva com sucesso</p>
+    `,
+    CLEAR: /* html */ `
+      <p class="alert alert-info">Negociações apagadas</p>
+    `,
+    IMPORT: /* html */ `
+      <p class="alert alert-info">Negociações Importadas com sucesso</p>
+    `,
   }
 
   return strategyMap[strategy]

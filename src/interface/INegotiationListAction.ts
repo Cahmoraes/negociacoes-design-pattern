@@ -1,6 +1,6 @@
 import { NegotiationList } from '../domain'
 import { IAction } from './IAction'
 
-export type NegotiationAction = 'ADD' | 'CLEAR'
+export type NegotiationAction = 'ADD' | 'CLEAR' | 'IMPORT'
 
 export type INegotiationListAction = IAction<NegotiationAction, NegotiationList>

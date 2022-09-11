@@ -14,7 +14,7 @@ export class NegotiationController {
   private form: IElement<HTMLFormElement>
 
   @domInjector('#data')
-  private inputData: IElement<HTMLInputElement>
+  private inputDate: IElement<HTMLInputElement>
 
   @domInjector('#quantidade')
   private inputQuantity: IElement<HTMLInputElement>
@@ -28,14 +28,12 @@ export class NegotiationController {
   private readonly negotiationsList: NegotiationList
   private readonly negotiationView: NegotiationView
   private readonly messageView: MessageView
-  private connection: IDBDatabase | null
   private negotiationDao!: NegotiationDao
 
   constructor() {
     this.negotiationsList = new NegotiationList()
     this.negotiationView = new NegotiationView()
     this.messageView = new MessageView()
-    this.connection = null
     this.init()
   }
 
@@ -43,21 +41,27 @@ export class NegotiationController {
     event.preventDefault()
 
     try {
-      const negotiation = this.create()
+      const negotiation = this.create(
+        this.inputDate!.value,
+        this.inputQuantity!.value,
+        this.inputAmount!.value,
+      )
       if (this.validate(negotiation)) {
         await this.negotiationDao?.add(negotiation)
         this.negotiationsList.add(negotiation)
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      this.reset()
     }
   }
 
-  private create(): Negotiation {
+  private create(date: string, quantity: string, amount: string): Negotiation {
     const negotiation = new Negotiation(
-      DateFormat.toDate(this.inputData!.value),
-      parseInt(this.inputQuantity!.value),
-      parseFloat(this.inputAmount!.value),
+      DateFormat.toDate(date),
+      parseInt(quantity),
+      parseFloat(amount),
     )
     return negotiation
   }
@@ -74,7 +78,6 @@ export class NegotiationController {
 
   private addEvents(): void {
     this.form?.addEventListener('submit', this.add)
-
     this.clearButton?.addEventListener('click', this.clearNegotiationList)
   }
 
@@ -87,6 +90,12 @@ export class NegotiationController {
     this.negotiationsList.clear()
   }
 
+  private reset(): void {
+    this.inputAmount!.value = '0'
+    this.inputQuantity!.value = '0.0'
+    this.inputDate!.value = ''
+  }
+
   private async init(): Promise<void> {
     this.bindEvent()
     this.addEvents()
@@ -95,8 +104,11 @@ export class NegotiationController {
 
     try {
       this.negotiationDao = await DaoFactory.getNegotiationDao()
-      const result = await this.negotiationDao.getAll()
-      console.log(result)
+      const negotiations = await this.negotiationDao.getAll()
+
+      negotiations.forEach((negotiation) =>
+        this.negotiationsList.import(negotiation),
+      )
     } catch (error) {
       console.log(error)
     }

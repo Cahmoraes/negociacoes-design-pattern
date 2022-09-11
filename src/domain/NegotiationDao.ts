@@ -1,5 +1,10 @@
 import { Negotiation } from './Negotiation'
 
+interface IIDBResponse {
+  _quantity: number
+  _amount: number
+  _date: Date
+}
 export class NegotiationDao {
   private readonly store = 'negotiation'
   constructor(private readonly connection: IDBDatabase) {}
@@ -19,23 +24,30 @@ export class NegotiationDao {
         reject(dbRequest.error)
       }
 
-      this.closeTransaction(transaction)
+      // this.closeTransaction(transaction)
     })
   }
 
-  public getAll(): Promise<any[]> {
+  public getAll(): Promise<Negotiation[]> {
     return new Promise<Negotiation[]>((resolve, reject) => {
       const transaction = this.connection.transaction(this.store)
       const cursor = transaction.objectStore(this.store).openCursor()
 
-      const negotiations: any[] = []
+      const negotiations: Negotiation[] = []
 
       cursor.onsuccess = (event) => {
         const idbRequest = event.target as IDBRequest
         const cursor = idbRequest.result as IDBCursorWithValue
 
         if (cursor) {
-          const negotiation = cursor.value
+          const value = cursor.value as IIDBResponse
+
+          const negotiation = new Negotiation(
+            value._date,
+            value._quantity,
+            value._amount,
+          )
+
           negotiations.push(negotiation)
           cursor.continue()
         } else {
@@ -48,7 +60,7 @@ export class NegotiationDao {
         reject(idbRequest.error)
       }
 
-      this.closeTransaction(transaction)
+      // this.closeTransaction(transaction)
     })
   }
 
