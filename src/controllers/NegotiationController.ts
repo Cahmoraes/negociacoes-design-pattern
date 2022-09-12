@@ -9,6 +9,8 @@ import { MessageView, NegotiationView } from '../ui/views'
 import { domInjector } from '../util/decorators'
 import { DateFormat, DaoFactory, ProxyFactory } from '../util'
 import { HttpService } from '../infra/HttpService'
+import { NegotiationLoadMapper } from '../util/DataMapper/NegotiationLoadMapper'
+import { INegotiationResponse } from '../domain/interfaces'
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT
 console.log(API_ENDPOINT)
@@ -35,11 +37,14 @@ export class NegotiationController {
   private readonly negotiationView: NegotiationView
   private readonly messageView: MessageView
   private negotiationDao!: NegotiationDao
-  private readonly httpService = new HttpService<Negotiation[]>(API_ENDPOINT)
+  private negotiationLoadMapper: NegotiationLoadMapper
+  private httpService: HttpService<INegotiationResponse>
 
   constructor() {
     this.negotiationsList = new NegotiationList()
     this.messageView = new MessageView()
+    this.negotiationLoadMapper = new NegotiationLoadMapper()
+    this.httpService = new HttpService<INegotiationResponse>(API_ENDPOINT)
 
     this.negotiationView = ProxyFactory.create(
       new NegotiationView(),
@@ -138,7 +143,11 @@ export class NegotiationController {
       )
 
       const service = new NegotiationService(this.httpService)
-      const negotiations = await service.get()
+      const negotiationsResponse = await service.get()
+
+      const negotiations = this.negotiationLoadMapper
+        .setData(negotiationsResponse.negotiations)
+        .buildNegotiations()
 
       console.log({ negotiations })
     } catch (error) {
