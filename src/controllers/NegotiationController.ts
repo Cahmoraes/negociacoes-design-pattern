@@ -130,9 +130,15 @@ export class NegotiationController {
     try {
       this.negotiationDao = await DaoFactory.getNegotiationDao()
       const negotiations = await this.negotiationDao.getAll()
-      if (negotiations.length > 0) this.negotiationsList.import(negotiations)
+      this.importToList(negotiations)
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  private importToList(negotiations: Negotiation[]): void {
+    if (negotiations.length > 0) {
+      this.negotiationsList.import(negotiations)
     }
   }
 
@@ -148,6 +154,8 @@ export class NegotiationController {
       const negotiations = this.negotiationLoadMapper
         .setData(negotiationsResponse.negotiations)
         .buildNegotiations()
+
+      this.importToList(negotiations)
 
       console.log({ negotiations })
     } catch (error) {
