@@ -23,11 +23,13 @@ export class NegotiationList {
   }
 
   public import(negotiations: Negotiation[]): void {
-    negotiations
-      .filter((negotiation) => !this.isDuplicate(negotiation))
-      .forEach((negotiation) => this._negotiations.push(negotiation))
-
+    this.filterDuplicateNegotiationsList(negotiations)
     this.notify('IMPORT')
+  }
+
+  public load(negotiations: Negotiation[]): void {
+    this.filterDuplicateNegotiationsList(negotiations)
+    this.notify('LOAD')
   }
 
   public clear(): void {
@@ -60,6 +62,12 @@ export class NegotiationList {
     this.observers.forEach((observer) =>
       observer.update({ action, data: this }),
     )
+  }
+
+  private filterDuplicateNegotiationsList(negotiations: Negotiation[]): void {
+    negotiations
+      .filter((negotiation) => !this.isDuplicate(negotiation))
+      .forEach((negotiation) => this._negotiations.push(negotiation))
   }
 
   private isDuplicate(negotiation: Negotiation): boolean {

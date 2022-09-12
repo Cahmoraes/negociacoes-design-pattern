@@ -1,10 +1,10 @@
 import { IHttpService } from '../infra/HttpService/interface'
-import { INegotiationResponse } from './interfaces'
+import { IResponse } from './interfaces'
 
 export class NegotiationService {
-  constructor(private readonly service: IHttpService<INegotiationResponse>) {}
+  constructor(private readonly service: IHttpService<IResponse>) {}
 
-  public async get(): Promise<INegotiationResponse> {
+  public async get(): Promise<IResponse> {
     return this.service.get()
   }
 }

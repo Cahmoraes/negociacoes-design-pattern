@@ -1,13 +1,18 @@
 import { Negotiation } from './Negotiation'
+import { NegotiationImportMapper } from '../util/DataMapper/NegotiationImportMapper'
 
-interface IIDBResponse {
+export interface IIDBResponse {
   _quantity: number
   _amount: number
   _date: Date
 }
 export class NegotiationDao {
   private readonly store = 'negotiation'
-  constructor(private readonly connection: IDBDatabase) {}
+  private negotiationImportMapper: NegotiationImportMapper
+
+  constructor(private readonly connection: IDBDatabase) {
+    this.negotiationImportMapper = new NegotiationImportMapper()
+  }
 
   public async add(negotiation: Negotiation): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -33,7 +38,7 @@ export class NegotiationDao {
       const transaction = this.connection.transaction(this.store)
       const cursor = transaction.objectStore(this.store).openCursor()
 
-      const negotiations: Negotiation[] = []
+      const negotiationsResponse: IIDBResponse[] = []
 
       cursor.onsuccess = (event) => {
         const idbRequest = event.target as IDBRequest
@@ -41,16 +46,13 @@ export class NegotiationDao {
 
         if (cursor) {
           const value = cursor.value as IIDBResponse
-
-          const negotiation = new Negotiation(
-            value._date,
-            value._quantity,
-            value._amount,
-          )
-
-          negotiations.push(negotiation)
+          negotiationsResponse.push(value)
           cursor.continue()
         } else {
+          const negotiations = this.negotiationImportMapper
+            .setData(negotiationsResponse)
+            .buildNegotiations()
+
           resolve(negotiations)
         }
       }

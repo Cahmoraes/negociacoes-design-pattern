@@ -1,9 +1,9 @@
-export interface IResponse {
+export interface INegotiationResponse {
   date: string
   amount: number
   quantity: number
 }
 
-export interface INegotiationResponse {
-  negotiations: IResponse[]
+export interface IResponse {
+  negotiations: INegotiationResponse[]
 }

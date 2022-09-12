@@ -13,6 +13,10 @@ export class DateFormat {
   }
 
   public static toDate(string: string): Date {
+    return new Date(string)
+  }
+
+  public static stringToDate(string: string): Date {
     const stringToDate = string.split('-').map(Number)
     return new Date(stringToDate[0], stringToDate[1] - 1, stringToDate[2])
   }

@@ -58,7 +58,10 @@ const templateStrategy = (function () {
     `,
     DELETE: /* html */ `
     <p class="alert alert-info">Negociação deletada com sucesso</p>
-  `,
+    `,
+    LOAD: /* html */ `
+    <p class="alert alert-info">Negociações carregadas com sucesso</p>
+    `,
   }
 
   return (strategy: NegotiationAction) => strategyMap[strategy]

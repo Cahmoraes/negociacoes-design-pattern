@@ -10,7 +10,7 @@ import { domInjector } from '../util/decorators'
 import { DateFormat, DaoFactory, ProxyFactory } from '../util'
 import { HttpService } from '../infra/HttpService'
 import { NegotiationLoadMapper } from '../util/DataMapper/NegotiationLoadMapper'
-import { INegotiationResponse } from '../domain/interfaces'
+import { IResponse } from '../domain/interfaces'
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT
 console.log(API_ENDPOINT)
@@ -38,13 +38,13 @@ export class NegotiationController {
   private readonly messageView: MessageView
   private negotiationDao!: NegotiationDao
   private negotiationLoadMapper: NegotiationLoadMapper
-  private httpService: HttpService<INegotiationResponse>
+  private httpService: HttpService<IResponse>
 
   constructor() {
     this.negotiationsList = new NegotiationList()
     this.messageView = new MessageView()
     this.negotiationLoadMapper = new NegotiationLoadMapper()
-    this.httpService = new HttpService<INegotiationResponse>(API_ENDPOINT)
+    this.httpService = new HttpService<IResponse>(API_ENDPOINT)
 
     this.negotiationView = ProxyFactory.create(
       new NegotiationView(),
@@ -77,7 +77,7 @@ export class NegotiationController {
 
   private create(date: string, quantity: string, amount: string): Negotiation {
     const negotiation = new Negotiation(
-      DateFormat.toDate(date),
+      DateFormat.stringToDate(date),
       parseInt(quantity),
       parseFloat(amount),
     )
@@ -97,13 +97,13 @@ export class NegotiationController {
   private addEvents(): void {
     this.form?.addEventListener('submit', this.add)
     this.clearButton?.addEventListener('click', this.clearNegotiationList)
-    this.importButton?.addEventListener('click', this.import)
+    this.importButton?.addEventListener('click', this.load)
   }
 
   private bindEvent(): void {
     this.add = this.add.bind(this)
     this.clearNegotiationList = this.clearNegotiationList.bind(this)
-    this.import = this.import.bind(this)
+    this.load = this.load.bind(this)
   }
 
   private async clearNegotiationList(): Promise<void> {
@@ -121,6 +121,10 @@ export class NegotiationController {
     this.inputDate!.value = ''
   }
 
+  private isNegotiationsEmpty(negotiations: Negotiation[]): boolean {
+    return negotiations.length > 0
+  }
+
   private async init(): Promise<void> {
     this.bindEvent()
     this.addEvents()
@@ -130,19 +134,15 @@ export class NegotiationController {
     try {
       this.negotiationDao = await DaoFactory.getNegotiationDao()
       const negotiations = await this.negotiationDao.getAll()
-      this.importToList(negotiations)
+
+      this.isNegotiationsEmpty(negotiations) &&
+        this.negotiationsList.import(negotiations)
     } catch (error) {
       console.log(error)
     }
   }
 
-  private importToList(negotiations: Negotiation[]): void {
-    if (negotiations.length > 0) {
-      this.negotiationsList.import(negotiations)
-    }
-  }
-
-  private async import() {
+  private async load() {
     try {
       const { NegotiationService } = await import(
         '../domain/NegotiationService'
@@ -155,17 +155,14 @@ export class NegotiationController {
         .setData(negotiationsResponse.negotiations)
         .buildNegotiations()
 
-      this.importToList(negotiations)
-
-      console.log({ negotiations })
+      this.isNegotiationsEmpty(negotiations) &&
+        this.negotiationsList.load(negotiations)
     } catch (error) {
       console.log(error)
     }
   }
 
   private async delete(negotiation: Negotiation): Promise<void> {
-    console.log('Deleting negotiation')
-    console.log({ negotiation })
     try {
       this.negotiationDao.delete(negotiation)
     } catch (error) {
