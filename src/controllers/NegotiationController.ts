@@ -8,7 +8,10 @@ import {
 import { MessageView, NegotiationView } from '../ui/views'
 import { domInjector } from '../util/decorators'
 import { DateFormat, DaoFactory, ProxyFactory } from '../util'
+import { HttpService } from '../infra/HttpService'
 
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT
+console.log(API_ENDPOINT)
 export class NegotiationController {
   @domInjector('form')
   private form: IElement<HTMLFormElement>
@@ -25,10 +28,14 @@ export class NegotiationController {
   @domInjector('#botao-apaga')
   private clearButton: IElement<HTMLButtonElement>
 
+  @domInjector('#botao-importa')
+  private importButton: IElement<HTMLButtonElement>
+
   private readonly negotiationsList: NegotiationList
   private readonly negotiationView: NegotiationView
   private readonly messageView: MessageView
   private negotiationDao!: NegotiationDao
+  private readonly httpService = new HttpService<Negotiation[]>(API_ENDPOINT)
 
   constructor() {
     this.negotiationsList = new NegotiationList()
@@ -85,11 +92,13 @@ export class NegotiationController {
   private addEvents(): void {
     this.form?.addEventListener('submit', this.add)
     this.clearButton?.addEventListener('click', this.clearNegotiationList)
+    this.importButton?.addEventListener('click', this.import)
   }
 
   private bindEvent(): void {
     this.add = this.add.bind(this)
     this.clearNegotiationList = this.clearNegotiationList.bind(this)
+    this.import = this.import.bind(this)
   }
 
   private async clearNegotiationList(): Promise<void> {
@@ -117,6 +126,21 @@ export class NegotiationController {
       this.negotiationDao = await DaoFactory.getNegotiationDao()
       const negotiations = await this.negotiationDao.getAll()
       if (negotiations.length > 0) this.negotiationsList.import(negotiations)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  private async import() {
+    try {
+      const { NegotiationService } = await import(
+        '../domain/NegotiationService'
+      )
+
+      const service = new NegotiationService(this.httpService)
+      const negotiations = await service.get()
+
+      console.log({ negotiations })
     } catch (error) {
       console.log(error)
     }
