@@ -1,5 +1,5 @@
 <h3 align="center">
-  <a href="https://cahmoraes.github.io/cangaceiro-javascript/" target="_blank">Design Patterns com Typescript</a>
+  <a href="https://cahmoraes.github.io/negociacoes-design-pattern/" target="_blank">Design Patterns com Typescript</a>
 </h3>
 
 <h4 align="center">Pratique como você joga e você jogará como pratica</h4>
