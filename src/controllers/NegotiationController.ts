@@ -116,8 +116,7 @@ export class NegotiationController {
     try {
       this.negotiationDao = await DaoFactory.getNegotiationDao()
       const negotiations = await this.negotiationDao.getAll()
-
-      this.negotiationsList.import(negotiations)
+      if (negotiations.length > 0) this.negotiationsList.import(negotiations)
     } catch (error) {
       console.log(error)
     }
