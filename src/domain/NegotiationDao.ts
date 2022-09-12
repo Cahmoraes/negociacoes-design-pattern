@@ -119,7 +119,7 @@ export class NegotiationDao {
     })
   }
 
-  private closeTransaction(transaction: IDBTransaction): void {
-    transaction.oncomplete = () => this.connection.close()
-  }
+  // private closeTransaction(transaction: IDBTransaction): void {
+  //   transaction.oncomplete = () => this.connection.close()
+  // }
 }
