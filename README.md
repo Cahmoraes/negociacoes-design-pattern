@@ -32,6 +32,9 @@ Aprendizados aplicados:
   <li>Code Splitting: técnica para dividir o bundle final em vários pedaços, visando ganho de performance e rápido carregamento da aplicação</li>
   <li>Lazy Loading: carregamento preguiçoso de módulos. Módulo NegociacaoService será carregado somente quando necessário</li>
   <li>Memoization: Foram utilizadas técnicas de memoização para evitar re-computar informações previamente calculadas em funções puras.</li>
+  <li>Data Mapper: padrão de projeto utilizado para mapear resultados vindo de respostas do servidor, para instâncias de classes.</li>
+  <li>Template Method: padrão de projeto utilizado para definir uma classe template para classes filhas implementarem o algoritmo de execução.</li>
+  <li>Barrel: técnica utilizada para centralizar todas as importações de arquivos em um único lugar, evitando centenas de instruções de imports.</li>
 </ul>
 </p>
 
