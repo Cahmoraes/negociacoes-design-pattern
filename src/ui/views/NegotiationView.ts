@@ -17,9 +17,26 @@ export class NegotiationView implements IIObserver<INegotiationListAction> {
   }
 
   public update({ data }: INegotiationListAction): void {
-    const tableRows = this.createTableRows(data.negotiations)
     this.negotiationList = data
+    const tableRows = this.createTableRows(data.negotiations)
+    tableRows.push(this.createVolumeTotalTableRow())
     this.print(tableRows)
+  }
+
+  private createVolumeTotalTableRow(): HTMLTableRowElement {
+    const trEl = document.createElement('tr')
+    trEl.innerHTML = /* html */ `
+      <td colspan="3"></td>
+      <td colspan="2" align="right">Total: ${this.getVolumeTotal()}</td>
+    `
+    return trEl
+  }
+
+  private getVolumeTotal(): number {
+    return this.negotiationList!.negotiations.reduce(
+      (total, negotiation) => total + negotiation.volume,
+      0,
+    )
   }
 
   private print(tableRows: HTMLTableRowElement[]): void {
@@ -74,6 +91,7 @@ export class NegotiationView implements IIObserver<INegotiationListAction> {
 
   private createDeleteButton(negotiation: Negotiation): HTMLButtonElement {
     const deleteButtonEl = document.createElement('button')
+    deleteButtonEl.classList.add('btn', 'btn-primary')
     deleteButtonEl.textContent = 'Excluir'
     deleteButtonEl.onclick = () => this.handleDeleteNegotiation(negotiation)
     return deleteButtonEl
