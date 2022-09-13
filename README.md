@@ -20,12 +20,13 @@ reproduzi utilizando a linguagem Typscript e adicionando novos Design Patterns a
 Aprendizados aplicados:
 <ul>
   <li>Padrão arquitetural MVC: cada aspecto do padrão MVC (Model, Controller e View)</li>
-  <li>Padrão Observer: padrão utilizado para notificar ouvintes em fluxos de dados. Neste projeto foi utilizado para notificar as Views, sempre que o modelo de NegotiationList fosse atualizado.</li>
+  <li>Padrão Observer: é um padrão de projeto comportamental que permite que você defina um mecanismo de assinatura para notificar múltiplos objetos sobre quaisquer eventos que aconteçam com o objeto que eles estão observando.</li>
+  <li>Padrão Chain of Responsibility: é um padrão de projeto comportamental que permite que você passe pedidos por uma corrente de handlers. Ao receber um pedido, cada handler decide se processa o pedido ou o passa adiante para o próximo handler na corrente.</li>
   <li>Padrão Factory: padrão utilizado para abstrair a complexidade na construção de objetos mais complexos.</li>
   <li>Parão Proxy: padrão utilizado para interceptar chamadas a métodos e propriedades de objetos. No projeto, este padrão foi utilizado para separar códigos da View e de Infra. No momento que uma negociação fosse excluída, um proxy intercepta a exclusão na View e aciona uma chamada para camada de infra realizar a exclusão no banco,</li>
   <li>Padrão Promise: este padrão foi utilizado para facilitar chamadas assícronas na API do IndexedDB</li>
   <li>Error-First Callback: Técnica utilizada em funções de callback para tratar resultados de operações assíncronas</li>
-  <li>Padrão Decorator: este padrão permitir adicionar camadas de funcionalidades extras em funcionalidades existentes. Neste projeto foi utilizado para injetar elementos DOM em propriedades de Classe, evitando duplicação de código.</li>
+  <li>Padrão Decorator: é um padrão de projeto estrutural que permite que você acople novos comportamentos para objetos ao colocá-los dentro de invólucros de objetos que contém os comportamentos. Neste projeto foi utilizado para injetar elementos DOM em propriedades de Classe, evitando duplicação de código.</li>
   <li>IndexedDB: banco de dados transacional para persistência de dados no navegador</li>
   <li>Monkey Patching (dynamic runtime patching): técnica para modificar ou estender o comportamento de uma aplicação em seu tempo de execução</li>
   <li>Padrão DAO (Data Access Object): tem como objetivo esconder os detalhes de acesso aos dados, fornecendo métodos de alto nível para o desenvolvedor</li>
