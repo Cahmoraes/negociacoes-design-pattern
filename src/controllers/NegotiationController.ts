@@ -15,6 +15,7 @@ import {
 } from '../util'
 import { HttpService } from '../infra/HttpService'
 import { IResponse } from '../domain/interfaces'
+import { debounce } from '../util/decorators/debounce'
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT
 console.log(API_ENDPOINT)
@@ -144,6 +145,7 @@ export class NegotiationController {
     }
   }
 
+  @debounce(250)
   private async load() {
     try {
       const { NegotiationService } = await import(

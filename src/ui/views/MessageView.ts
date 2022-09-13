@@ -31,37 +31,25 @@ export class MessageView implements IIObserver<INegotiationListAction> {
   }
 
   private hideMessage() {
-    this.element!.innerHTML = '<p></p>'
+    this.element!.innerHTML = /* html */ `<p></p>`
   }
 
   private template(action: NegotiationAction) {
     return action
       ? /* html */ `
-    ${templateStrategy(action)}
+      <p class="alert alert-info">${templateStrategy(action)}</p>
     `
-      : /* html */ `
-    <p></p>
-    `
+      : /* html */ `<p></p>`
   }
 }
 
 const templateStrategy = (function () {
   const strategyMap: Record<NegotiationAction, string> = {
-    ADD: /* html */ `
-      <p class="alert alert-info">Negociação salva com sucesso</p>
-    `,
-    CLEAR: /* html */ `
-      <p class="alert alert-info">Negociações apagadas</p>
-    `,
-    IMPORT: /* html */ `
-      <p class="alert alert-info">Negociações Importadas com sucesso</p>
-    `,
-    DELETE: /* html */ `
-    <p class="alert alert-info">Negociação deletada com sucesso</p>
-    `,
-    LOAD: /* html */ `
-    <p class="alert alert-info">Negociações carregadas com sucesso</p>
-    `,
+    ADD: 'Negociação salva com sucesso',
+    CLEAR: 'Negociações apagadas',
+    IMPORT: 'Negociações Importadas com sucesso',
+    DELETE: 'Negociação deletada com sucesso',
+    LOAD: 'Negociações carregadas com sucesso',
   }
 
   return (strategy: NegotiationAction) => strategyMap[strategy]
