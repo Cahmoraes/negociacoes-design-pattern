@@ -1,9 +1,5 @@
 export function debounce(milliseconds = 200) {
-  return (
-    target: unknown,
-    property: PropertyKey,
-    descriptor: PropertyDescriptor,
-  ) => {
+  return (_: unknown, __: PropertyKey, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value
     let timer = 0
 
