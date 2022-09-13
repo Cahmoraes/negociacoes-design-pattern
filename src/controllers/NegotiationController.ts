@@ -128,23 +128,6 @@ export class NegotiationController {
     return negotiations.length > 0
   }
 
-  private async init(): Promise<void> {
-    this.bindEvent()
-    this.addEvents()
-    this.negotiationsList.subscribe(this.negotiationView)
-    this.negotiationsList.subscribe(this.messageView)
-
-    try {
-      this.negotiationDao = await DaoFactory.getNegotiationDao()
-      const negotiations = await this.negotiationDao.getAll()
-
-      this.isNegotiationsEmpty(negotiations) &&
-        this.negotiationsList.import(negotiations)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   @debounce(250)
   private async load() {
     try {
@@ -175,6 +158,23 @@ export class NegotiationController {
   private async delete(negotiation: Negotiation): Promise<void> {
     try {
       this.negotiationDao.delete(negotiation)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  private async init(): Promise<void> {
+    this.bindEvent()
+    this.addEvents()
+    this.negotiationsList.subscribe(this.negotiationView)
+    this.negotiationsList.subscribe(this.messageView)
+
+    try {
+      this.negotiationDao = await DaoFactory.getNegotiationDao()
+      const negotiations = await this.negotiationDao.getAll()
+
+      this.isNegotiationsEmpty(negotiations) &&
+        this.negotiationsList.import(negotiations)
     } catch (error) {
       console.log(error)
     }
