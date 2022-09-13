@@ -36,7 +36,9 @@ Aprendizados aplicados:
   <li>Data Mapper: padrão de projeto utilizado para mapear resultados vindo de respostas do servidor, para instâncias de classes.</li>
   <li>Template Method: padrão de projeto utilizado para definir uma classe template para classes filhas implementarem o algoritmo de execução.</li>
   <li>Barrel: técnica utilizada para centralizar todas as importações de arquivos em um único lugar, evitando centenas de instruções de imports.</li>
-  <li>Facade: padrão de projeto criacional utilizado para abstrair uma criação complexa de objetos, entregando uma interface simples. Foi utilizado neste projeto para abstrair a complexidade de criar um objeto de DataMapper.</li>
+  <li>Padrão Facade: padrão de projeto criacional utilizado para abstrair uma criação complexa de objetos, entregando uma interface simples. Foi utilizado neste projeto para abstrair a complexidade de criar um objeto de DataMapper.</li>
+  <li>Padrão Strategy: é um padrão de projeto comportamental que permite que você defina uma família de algoritmos, coloque-os em classes separadas, e faça os objetos deles intercambiáveis. Neste projeto foi utilizado para definir a mensagem exibida em tela, para cada ação.</li>
+   <li>Debounce: é uma técnica de perfomance utilizada para agendar o disparado de uma ação após um intervalo de tempo. Mesmo se essa ação for disparada diversas vezes, somente uma será agendada para ser disparada após um timer configurado.</li>
 </ul>
 </p>
 
