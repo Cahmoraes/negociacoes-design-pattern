@@ -7,9 +7,13 @@ import {
 } from '../ui/validator'
 import { MessageView, NegotiationView } from '../ui/views'
 import { domInjector } from '../util/decorators'
-import { DateFormat, DaoFactory, ProxyFactory } from '../util'
+import {
+  DateFormat,
+  DaoFactory,
+  ProxyFactory,
+  NegotiationsLoaderFacade,
+} from '../util'
 import { HttpService } from '../infra/HttpService'
-import { NegotiationLoadMapper } from '../util/DataMapper/NegotiationLoadMapper'
 import { IResponse } from '../domain/interfaces'
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT
@@ -37,13 +41,11 @@ export class NegotiationController {
   private readonly negotiationView: NegotiationView
   private readonly messageView: MessageView
   private negotiationDao!: NegotiationDao
-  private negotiationLoadMapper: NegotiationLoadMapper
   private httpService: HttpService<IResponse>
 
   constructor() {
     this.negotiationsList = new NegotiationList()
     this.messageView = new MessageView()
-    this.negotiationLoadMapper = new NegotiationLoadMapper()
     this.httpService = new HttpService<IResponse>(API_ENDPOINT)
 
     this.negotiationView = ProxyFactory.create(
@@ -149,17 +151,23 @@ export class NegotiationController {
       )
 
       const service = new NegotiationService(this.httpService)
-      const negotiationsResponse = await service.get()
+      const response = await service.get()
 
-      const negotiations = this.negotiationLoadMapper
-        .setData(negotiationsResponse.negotiations)
-        .buildNegotiations()
+      const negotiations = NegotiationsLoaderFacade.buildNegotiations(
+        response.negotiations,
+      )
 
-      this.isNegotiationsEmpty(negotiations) &&
+      if (this.isNegotiationsEmpty(negotiations)) {
+        negotiations.forEach((negotiation) => this.saveDAO(negotiation))
         this.negotiationsList.load(negotiations)
+      }
     } catch (error) {
       console.log(error)
     }
+  }
+
+  private async saveDAO(negotiation: Negotiation) {
+    await this.negotiationDao?.add(negotiation)
   }
 
   private async delete(negotiation: Negotiation): Promise<void> {

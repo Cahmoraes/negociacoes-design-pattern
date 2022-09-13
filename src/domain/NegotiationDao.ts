@@ -1,5 +1,5 @@
 import { Negotiation } from './Negotiation'
-import { NegotiationImportMapper } from '../util/DataMapper/NegotiationImportMapper'
+import { NegotiationImportMapper } from '../util/DataMapper'
 
 export interface IIDBResponse {
   _quantity: number

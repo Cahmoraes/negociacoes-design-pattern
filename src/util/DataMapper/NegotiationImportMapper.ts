@@ -1,5 +1,5 @@
 import { IIDBResponse, Negotiation } from '../../domain'
-import { NegotiationDataMapper } from './interface/NegotiationDataMapper'
+import { NegotiationDataMapper } from './interface'
 
 export class NegotiationImportMapper extends NegotiationDataMapper<IIDBResponse> {
   public buildNegotiations(): Negotiation[] {
