@@ -19,7 +19,7 @@ export class NegotiationList {
       eventEmitter.emit('DUPLICATE', 'DUPLICATED')
       return false
     }
-    console.log('aqui')
+
     this._negotiations.push(negotiation)
     this.notify('ADD')
     return true
