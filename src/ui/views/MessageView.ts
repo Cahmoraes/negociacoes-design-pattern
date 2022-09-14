@@ -2,8 +2,9 @@ import type { IElement } from '../../interface'
 import { IIObserver } from '../../interface'
 import {
   INegotiationListAction,
-  NegotiationAction,
+  INegotiationAction,
 } from '../../interface/INegotiationListAction'
+import { eventEmitter } from '../../util'
 import { domInjector } from '../../util/decorators'
 
 export class MessageView implements IIObserver<INegotiationListAction> {
@@ -13,12 +14,19 @@ export class MessageView implements IIObserver<INegotiationListAction> {
   private timer = 0
   private milliseconds = 2000
 
+  constructor() {
+    eventEmitter.on('DUPLICATE', (action) => {
+      this.print(action)
+      this.setTimer()
+    })
+  }
+
   public update({ action }: INegotiationListAction): void {
     this.print(action)
     this.setTimer()
   }
 
-  public print(action: NegotiationAction): void {
+  public print(action: INegotiationAction): void {
     this.element!.innerHTML = this.template(action)
   }
 
@@ -34,23 +42,24 @@ export class MessageView implements IIObserver<INegotiationListAction> {
     this.element!.innerHTML = /* html */ `<p></p>`
   }
 
-  private template(action: NegotiationAction) {
+  private template(action: INegotiationAction) {
     return action
       ? /* html */ `
-      <p class="alert alert-info">${templateStrategy(action)}</p>
+      ${templateStrategy(action)}
     `
       : /* html */ `<p></p>`
   }
 }
 
 const templateStrategy = (function () {
-  const strategyMap: Record<NegotiationAction, string> = {
-    ADD: 'Negociação salva com sucesso',
-    CLEAR: 'Negociações apagadas',
-    IMPORT: 'Negociações Importadas com sucesso',
-    DELETE: 'Negociação deletada com sucesso',
-    LOAD: 'Negociações carregadas com sucesso',
+  const strategyMap: Record<INegotiationAction, string> = {
+    ADD: /* html */ ` <p class="alert alert-info">Negociação salva com sucesso</p>`,
+    CLEAR: /* html */ ` <p class="alert alert-info">Negociações apagadas</p>`,
+    IMPORT: /* html */ `<p class="alert alert-info">Negociações Importadas com sucesso</p>`,
+    DELETE: /* html */ `<p class="alert alert-info">Negociação deletada com sucesso</p>`,
+    LOAD: /* html */ `<p class="alert alert-info">Negociações carregadas com sucesso</p>`,
+    DUPLICATED: /* html */ `<p class="alert alert-warning">Não é possível cadastrar negociação duplicada</p>`,
   }
 
-  return (strategy: NegotiationAction) => strategyMap[strategy]
+  return (strategy: INegotiationAction) => strategyMap[strategy]
 })()

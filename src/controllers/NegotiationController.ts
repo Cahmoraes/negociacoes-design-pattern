@@ -68,8 +68,8 @@ export class NegotiationController {
         this.inputAmount!.value,
       )
       if (this.validate(negotiation)) {
-        await this.negotiationDao?.add(negotiation)
-        this.negotiationsList.add(negotiation)
+        this.negotiationsList.add(negotiation) &&
+          (await this.negotiationDao?.add(negotiation))
       }
     } catch (error) {
       console.log(error)

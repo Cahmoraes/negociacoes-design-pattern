@@ -1,8 +1,9 @@
 import {
   INegotiationListAction,
-  NegotiationAction,
+  INegotiationAction,
 } from '../interface/INegotiationListAction'
 import { IIObserver } from '../interface/IObserver'
+import { eventEmitter } from '../util'
 import { Negotiation } from './Negotiation'
 
 export class NegotiationList {
@@ -13,13 +14,15 @@ export class NegotiationList {
     return this._negotiations
   }
 
-  public add(negotiation: Negotiation): void {
+  public add(negotiation: Negotiation): boolean {
     if (this.isDuplicate(negotiation)) {
-      return
+      eventEmitter.emit('DUPLICATE', 'DUPLICATED')
+      return false
     }
-
+    console.log('aqui')
     this._negotiations.push(negotiation)
     this.notify('ADD')
+    return true
   }
 
   public import(negotiations: Negotiation[]): void {
@@ -58,7 +61,7 @@ export class NegotiationList {
     this.notify('DELETE')
   }
 
-  private notify(action: NegotiationAction): void {
+  private notify(action: INegotiationAction): void {
     this.observers.forEach((observer) =>
       observer.update({ action, data: this }),
     )
