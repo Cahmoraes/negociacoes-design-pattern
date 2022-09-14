@@ -36,8 +36,9 @@ Aprendizados aplicados:
   <br>
   <li><b>Padrão Decorator</b>: é um padrão de projeto estrutural que permite que você acople novos comportamentos para objetos ao colocá-los dentro de invólucros de objetos que contém os comportamentos. Neste projeto foi utilizado para injetar elementos DOM em propriedades de Classe, evitando duplicação de código.</li>
   <br>
-  <li><b>Padrão Template Method</b>: é um padrão de projeto comportamental que define o esqueleto de um algoritmo na superclasse mas deixa as subclasses sobrescreverem etapas específicas do algoritmo sem modificar sua estrutura.</li>
+  <li><b>Padrão Template Method</b>: é um padrão que permite um aplicativo anunciar eventos para vários consumidores de seu interesse assincronamente, sem acoplar os remetentes aos destinatários. Este padrão foi utilizado para o modelo informar a view em caso de negociações duplicadas</li>
   <br>
+  <li><b>Padrão Publisher-Subscriber</b>: padrão utilizado para interceptar chamadas a métodos e propriedades de objetos. No projeto, este padrão foi utilizado para separar códigos da View e de Infra. No momento que uma negociação fosse excluída, um proxy intercepta a exclusão na View e aciona uma chamada para camada de infra realizar a exclusão no banco.</li>
   <li><b>Parão Proxy</b>: padrão utilizado para interceptar chamadas a métodos e propriedades de objetos. No projeto, este padrão foi utilizado para separar códigos da View e de Infra. No momento que uma negociação fosse excluída, um proxy intercepta a exclusão na View e aciona uma chamada para camada de infra realizar a exclusão no banco.</li>
   <br>
   <li><b>Padrão DAO (Data Access Object)</b>: tem como objetivo esconder os detalhes de acesso aos dados, fornecendo métodos de alto nível para o desenvolvedor.</li>
