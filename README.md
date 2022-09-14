@@ -39,6 +39,7 @@ Aprendizados aplicados:
   <li><b>Padrão Template Method</b>: é um padrão que permite um aplicativo anunciar eventos para vários consumidores de seu interesse assincronamente, sem acoplar os remetentes aos destinatários. Este padrão foi utilizado para o modelo informar a view em caso de negociações duplicadas</li>
   <br>
   <li><b>Padrão Publisher-Subscriber</b>: padrão utilizado para interceptar chamadas a métodos e propriedades de objetos. No projeto, este padrão foi utilizado para separar códigos da View e de Infra. No momento que uma negociação fosse excluída, um proxy intercepta a exclusão na View e aciona uma chamada para camada de infra realizar a exclusão no banco.</li>
+  <br>
   <li><b>Parão Proxy</b>: padrão utilizado para interceptar chamadas a métodos e propriedades de objetos. No projeto, este padrão foi utilizado para separar códigos da View e de Infra. No momento que uma negociação fosse excluída, um proxy intercepta a exclusão na View e aciona uma chamada para camada de infra realizar a exclusão no banco.</li>
   <br>
   <li><b>Padrão DAO (Data Access Object)</b>: tem como objetivo esconder os detalhes de acesso aos dados, fornecendo métodos de alto nível para o desenvolvedor.</li>
