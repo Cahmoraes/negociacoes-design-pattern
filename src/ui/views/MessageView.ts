@@ -16,17 +16,20 @@ export class MessageView implements IIObserver<INegotiationListAction> {
 
   constructor() {
     eventEmitter.on('DUPLICATE', (action) => {
-      this.print(action)
-      this.setTimer()
+      this.showMessage(action)
     })
   }
 
   public update({ action }: INegotiationListAction): void {
+    this.showMessage(action)
+  }
+
+  private showMessage(action: INegotiationAction) {
     this.print(action)
     this.setTimer()
   }
 
-  public print(action: INegotiationAction): void {
+  private print(action: INegotiationAction): void {
     this.element!.innerHTML = this.template(action)
   }
 
