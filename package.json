@@ -5,6 +5,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
+    "lint": "npx eslint --fix --ext .ts",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
@@ -26,6 +27,7 @@
     "vite": "^2.9.9"
   },
   "dependencies": {
-    "miragejs": "^0.1.45"
+    "miragejs": "^0.1.45",
+    "simple-immuter": "^1.2.2"
   }
 }

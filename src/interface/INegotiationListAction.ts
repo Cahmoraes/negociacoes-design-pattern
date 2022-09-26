@@ -1,13 +1,22 @@
 import { NegotiationList } from '../domain'
 import { IAction } from './IAction'
 
+export enum INegotiationTypes {
+  'ADD' = 'ADD',
+  'CLEAR' = 'CLEAR',
+  'IMPORT' = 'IMPORT',
+  'DELETE' = 'DELETE',
+  'LOAD' = 'LOAD',
+  'DUPLICATED' = 'DUPLICATED',
+}
+
 export type INegotiationAction =
-  | 'ADD'
-  | 'CLEAR'
-  | 'IMPORT'
-  | 'DELETE'
-  | 'LOAD'
-  | 'DUPLICATED'
+  | INegotiationTypes.ADD
+  | INegotiationTypes.CLEAR
+  | INegotiationTypes.IMPORT
+  | INegotiationTypes.DELETE
+  | INegotiationTypes.LOAD
+  | INegotiationTypes.DUPLICATED
 
 export type INegotiationListAction = IAction<
   INegotiationAction,

@@ -1,6 +1,8 @@
+import { si } from 'simple-immuter'
 import {
   INegotiationListAction,
   INegotiationAction,
+  INegotiationTypes,
 } from '../interface/INegotiationListAction'
 import { IIObserver } from '../interface/IObserver'
 import { eventEmitter } from '../util'
@@ -11,35 +13,35 @@ export class NegotiationList {
   private observers = new Set<IIObserver<INegotiationListAction>>()
 
   get negotiations(): readonly Negotiation[] {
-    return this._negotiations
+    return si.produce(this._negotiations)
   }
 
   public add(negotiation: Negotiation): boolean {
     if (this.isDuplicate(negotiation)) {
-      eventEmitter.emit('DUPLICATE', 'DUPLICATED')
+      eventEmitter.emit('DUPLICATE', INegotiationTypes.DUPLICATED)
       return false
     }
 
     this._negotiations.push(negotiation)
-    this.notify('ADD')
+    this.notify(INegotiationTypes.ADD)
     return true
   }
 
   public import(negotiations: Negotiation[]): void {
     this.filterDuplicateNegotiationsList(negotiations)
-    this.notify('IMPORT')
+    this.notify(INegotiationTypes.IMPORT)
   }
 
   public load(negotiations: Negotiation[]): void {
     this.filterDuplicateNegotiationsList(negotiations)
-    this.notify('LOAD')
+    this.notify(INegotiationTypes.LOAD)
   }
 
   public clear(): void {
     if (this._negotiations.length === 0) return
 
     this._negotiations.length = 0
-    this.notify('CLEAR')
+    this.notify(INegotiationTypes.CLEAR)
   }
 
   public subscribe(observer: IIObserver<INegotiationListAction>): void {
@@ -58,7 +60,7 @@ export class NegotiationList {
     if (indexNegotiationToDelete < 0) return
 
     this._negotiations.splice(indexNegotiationToDelete, 1)
-    this.notify('DELETE')
+    this.notify(INegotiationTypes.DELETE)
   }
 
   private notify(action: INegotiationAction): void {
