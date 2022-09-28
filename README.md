@@ -61,7 +61,8 @@ Aprendizados aplicados:
   <li><b>Barrel</b>: técnica utilizada para centralizar todas as importações de arquivos em um único lugar, evitando centenas de instruções de imports.</li>
   <br>
    <li><b>Debounce</b>: é uma técnica de perfomance utilizada para agendar o disparado de uma ação após um intervalo de tempo. Mesmo se essa ação for disparada diversas vezes, somente uma será agendada para ser disparada após um timer configurado.</li>
-   <br>
+  <br>
+  <li><b>Mônada Maybe</b>: é um invólucro que permite acesso a uma informação. A Mônada Maybe é um técnica de programação funcional para processar dados que podem ou não "existir", desde modo, em caso de um dado retornar null ou undefined durante os processos de mapeamento, a aplicação continuará intacta.</li>
 </ul>
 </p>
 
