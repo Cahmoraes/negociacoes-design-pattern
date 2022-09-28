@@ -18,7 +18,6 @@ import { IResponse } from '../domain/interfaces'
 import { debounce } from '../util/decorators/debounce'
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT
-console.log(API_ENDPOINT)
 export class NegotiationController {
   @domInjector('form')
   private form: IElement<HTMLFormElement>
@@ -143,7 +142,13 @@ export class NegotiationController {
       )
 
       if (this.isNegotiationsEmpty(negotiations)) {
-        negotiations.forEach((negotiation) => this.saveDAO(negotiation))
+        const negotiationsFiltered =
+          this.negotiationsList.getFilteredDuplicateNegotiationsList(
+            negotiations,
+          )
+
+        negotiationsFiltered.forEach((negotiation) => this.saveDAO(negotiation))
+
         this.negotiationsList.load(negotiations)
       }
     } catch (error) {
@@ -171,10 +176,11 @@ export class NegotiationController {
 
     try {
       this.negotiationDao = await DaoFactory.getNegotiationDao()
-      const negotiations = await this.negotiationDao.getAll()
-
-      this.isNegotiationsEmpty(negotiations) &&
-        this.negotiationsList.import(negotiations)
+      ;(await this.negotiationDao.getAll()).map(
+        (negotiations) =>
+          this.isNegotiationsEmpty(negotiations) &&
+          this.negotiationsList.import(negotiations),
+      )
     } catch (error) {
       console.log(error)
     }

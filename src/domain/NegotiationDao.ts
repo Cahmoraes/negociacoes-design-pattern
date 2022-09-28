@@ -1,5 +1,6 @@
 import { Negotiation } from './Negotiation'
 import { NegotiationImportMapper } from '../util/DataMapper'
+import { Maybe } from '../util'
 
 export interface IIDBResponse {
   _quantity: number
@@ -33,8 +34,8 @@ export class NegotiationDao {
     })
   }
 
-  public getAll(): Promise<Negotiation[]> {
-    return new Promise<Negotiation[]>((resolve, reject) => {
+  public getAll(): Promise<Maybe<Negotiation[]>> {
+    return new Promise<Maybe<Negotiation[]>>((resolve, reject) => {
       const transaction = this.connection.transaction(this.store)
       const cursor = transaction.objectStore(this.store).openCursor()
 
@@ -53,7 +54,7 @@ export class NegotiationDao {
             .setData(negotiationsResponse)
             .buildNegotiations()
 
-          resolve(negotiations)
+          resolve(Maybe.of(negotiations))
         }
       }
 

@@ -28,13 +28,25 @@ export class NegotiationList {
   }
 
   public import(negotiations: Negotiation[]): void {
-    this.filterDuplicateNegotiationsList(negotiations)
+    this.getFilteredDuplicateNegotiationsList(negotiations).forEach(
+      (negotiation) => this._negotiations.push(negotiation),
+    )
+
     this.notify(INegotiationTypes.IMPORT)
   }
 
   public load(negotiations: Negotiation[]): void {
-    this.filterDuplicateNegotiationsList(negotiations)
+    this.getFilteredDuplicateNegotiationsList(negotiations).forEach(
+      (negotiation) => this._negotiations.push(negotiation),
+    )
+
     this.notify(INegotiationTypes.LOAD)
+  }
+
+  public getFilteredDuplicateNegotiationsList(
+    negotiations: Negotiation[],
+  ): Negotiation[] {
+    return negotiations.filter((negotiation) => !this.isDuplicate(negotiation))
   }
 
   public clear(): void {
@@ -67,12 +79,6 @@ export class NegotiationList {
     this.observers.forEach((observer) =>
       observer.update({ action, data: this }),
     )
-  }
-
-  private filterDuplicateNegotiationsList(negotiations: Negotiation[]): void {
-    negotiations
-      .filter((negotiation) => !this.isDuplicate(negotiation))
-      .forEach((negotiation) => this._negotiations.push(negotiation))
   }
 
   private isDuplicate(negotiation: Negotiation): boolean {
