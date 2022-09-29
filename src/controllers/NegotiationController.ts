@@ -123,7 +123,7 @@ export class NegotiationController {
     this.inputDate!.value = ''
   }
 
-  private isNegotiationsEmpty(negotiations: Negotiation[]): boolean {
+  private hasNegotiations(negotiations: Negotiation[]): boolean {
     return negotiations.length > 0
   }
 
@@ -141,7 +141,7 @@ export class NegotiationController {
         response.negotiations,
       )
 
-      if (this.isNegotiationsEmpty(negotiations)) {
+      if (this.hasNegotiations(negotiations)) {
         const negotiationsFiltered =
           this.negotiationsList.getFilteredDuplicateNegotiationsList(
             negotiations,
@@ -178,7 +178,7 @@ export class NegotiationController {
       this.negotiationDao = await DaoFactory.getNegotiationDao()
       ;(await this.negotiationDao.getAll()).map(
         (negotiations) =>
-          this.isNegotiationsEmpty(negotiations) &&
+          this.hasNegotiations(negotiations) &&
           this.negotiationsList.import(negotiations),
       )
     } catch (error) {
