@@ -40,8 +40,8 @@ export class NegotiationController {
   private readonly negotiationsList: NegotiationList
   private readonly negotiationView: NegotiationView
   private readonly messageView: MessageView
+  private readonly httpService: HttpService<IResponse>
   private negotiationDao!: NegotiationDao
-  private httpService: HttpService<IResponse>
 
   constructor() {
     this.negotiationsList = new NegotiationList()
