@@ -135,7 +135,12 @@ export class NegotiationController {
       )
 
       const service = new NegotiationService(this.httpService)
-      const response = await service.get()
+
+      const response = (await service.get()).getOrElse<IResponse>({
+        negotiations: [],
+      })
+
+      console.log(response)
 
       const negotiations = NegotiationsLoaderFacade.buildNegotiations(
         response.negotiations,

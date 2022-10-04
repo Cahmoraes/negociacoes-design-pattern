@@ -27,6 +27,7 @@
     "vite": "^2.9.9"
   },
   "dependencies": {
+    "@cahmoraes93/deep-strict-equal": "^1.0.0",
     "miragejs": "^0.1.45",
     "simple-immuter": "^1.2.2"
   }
