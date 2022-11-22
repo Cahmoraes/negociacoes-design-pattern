@@ -5,14 +5,20 @@ import { Negotiation } from '../../domain/Negotiation'
 import { DateFormat } from '../../util/DateFormat'
 import { INegotiationListAction } from '../../interface/INegotiationListAction'
 import { NegotiationList } from '../../domain'
+import { View } from '.'
 
-export class NegotiationView implements IIObserver<INegotiationListAction> {
+export class NegotiationView
+  extends View
+  implements IIObserver<INegotiationListAction>
+{
   @domInjector('#negociacoes')
-  private readonly element: IElement
+  private readonly negotiationsContainer: IElement
 
   private negotiationList: NegotiationList | null = null
 
   constructor() {
+    super()
+
     this.init()
   }
 
@@ -33,14 +39,16 @@ export class NegotiationView implements IIObserver<INegotiationListAction> {
   }
 
   private getVolumeTotal(): number {
-    return this.negotiationList!.negotiations.reduce(
+    if (!this.negotiationList) return 0
+
+    return this.negotiationList?.negotiations.reduce(
       (total, negotiation) => total + negotiation.volume,
       0,
     )
   }
 
-  private print(tableRows: HTMLTableRowElement[]): void {
-    const oldTbodyEl = this.element!.querySelector('tbody')
+  protected print(tableRows: HTMLTableRowElement[]): void {
+    const oldTbodyEl = this.negotiationsContainer!.querySelector('tbody')
     const newTbodyEl = document.createElement('tbody')
 
     newTbodyEl.append(...tableRows)
@@ -48,7 +56,9 @@ export class NegotiationView implements IIObserver<INegotiationListAction> {
   }
 
   private createTable(): void {
-    this.element!.innerHTML = /* html */ `
+    if (!this.negotiationsContainer) return
+
+    this.negotiationsContainer.innerHTML = /* html */ `
       <table class="table table-hover table-bordered">
         <thead>
           <tr>

@@ -3,8 +3,12 @@ import type { IElement } from '../../interface/IElement'
 import { IIObserver } from '../../interface/IObserver'
 import { INegotiationListAction } from '../../interface/INegotiationListAction'
 import { NegotiationList } from '../../domain'
+import { View } from '.'
 
-export class SummaryView implements IIObserver<INegotiationListAction> {
+export class SummaryView
+  extends View
+  implements IIObserver<INegotiationListAction>
+{
   @domInjector('#sumario')
   private readonly summaryContainer: IElement<HTMLDivElement>
 
@@ -14,6 +18,8 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
   private negotiationList: NegotiationList | null = null
 
   constructor() {
+    super()
+
     this.init()
   }
 
@@ -22,7 +28,7 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
     this.print()
   }
 
-  private print(): void {
+  protected print(): void {
     const table = this.createTableRow()
     this.summaryBody?.replaceChildren(table)
   }

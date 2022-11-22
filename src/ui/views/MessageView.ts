@@ -6,8 +6,12 @@ import {
 } from '../../interface/INegotiationListAction'
 import { eventEmitter } from '../../util'
 import { domInjector } from '../../util/decorators'
+import { View } from '.'
 
-export class MessageView implements IIObserver<INegotiationListAction> {
+export class MessageView
+  extends View
+  implements IIObserver<INegotiationListAction>
+{
   @domInjector('#mensagemView')
   private element: IElement<HTMLDivElement>
 
@@ -15,6 +19,8 @@ export class MessageView implements IIObserver<INegotiationListAction> {
   private milliseconds = 2000
 
   constructor() {
+    super()
+
     eventEmitter.on('DUPLICATE', (action) => {
       this.showMessage(action)
     })
@@ -29,7 +35,7 @@ export class MessageView implements IIObserver<INegotiationListAction> {
     this.setTimer()
   }
 
-  private print(action: INegotiationAction): void {
+  protected print(action: INegotiationAction): void {
     if (!this.element) return
     this.element.innerHTML = this.template(action)
   }
