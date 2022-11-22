@@ -34,11 +34,7 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
   }
 
   private calculateSummary(): number[] {
-    return [
-      this.getTotalOf('quantity'),
-      this.getTotalOf('volume'),
-      this.getVolumeTotal(),
-    ]
+    return [this.getTotalOf('quantity'), this.getTotalOf('volume')]
   }
 
   private getTotalOf(anUnity: 'volume' | 'quantity'): number {
@@ -50,22 +46,12 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
     )
   }
 
-  private getVolumeTotal(): number {
-    if (!this.negotiationList) return 0
-
-    return this.negotiationList?.negotiations.reduce(
-      (total, negotiation) => total + negotiation.volume,
-      0,
-    )
-  }
-
   private createTable(): void {
     this.summaryContainer!.innerHTML = /* html */ `
       <table class="table table-hover table-bordered">
         <thead>
           <tr>
             <th scope="col">QUANTIDADE TOTAL</th>
-            <th scope="col">VALOR TOTAL</th>
             <th scope="col">VOLUME TOTAL</th>
           </tr>
         </thead>
