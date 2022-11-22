@@ -5,7 +5,7 @@ import {
   ValidateDateMiddleware,
   ValidateQuantityMiddleware,
 } from '../ui/validator'
-import { MessageView, NegotiationView } from '../ui/views'
+import { MessageView, NegotiationView, SummaryView } from '../ui/views'
 import { domInjector } from '../util/decorators'
 import {
   DateFormat,
@@ -16,7 +16,6 @@ import {
 import { HttpService } from '../infra/HttpService'
 import { IResponse } from '../domain/interfaces'
 import { debounce } from '../util/decorators/debounce'
-import { SummaryView } from '../ui/views/SummaryView'
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT
 export class NegotiationController {

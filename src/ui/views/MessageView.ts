@@ -30,19 +30,22 @@ export class MessageView implements IIObserver<INegotiationListAction> {
   }
 
   private print(action: INegotiationAction): void {
-    this.element!.innerHTML = this.template(action)
+    if (!this.element) return
+    this.element.innerHTML = this.template(action)
   }
 
-  private setTimer() {
+  private setTimer(): void {
     if (this.timer) clearTimeout(this.timer)
+
     this.timer = setTimeout(() => {
       this.hideMessage()
       this.timer = 0
     }, this.milliseconds)
   }
 
-  private hideMessage() {
-    this.element!.innerHTML = /* html */ `<p></p>`
+  private hideMessage(): void {
+    if (!this.element) return
+    this.element.innerHTML = /* html */ `<p></p>`
   }
 
   private template(action: INegotiationAction) {

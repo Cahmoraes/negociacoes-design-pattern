@@ -19,10 +19,15 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
 
   public update({ data }: INegotiationListAction): void {
     this.negotiationList = data
-    this.createTableRow()
+    this.print()
   }
 
-  private createTableRow() {
+  private print(): void {
+    const table = this.createTableRow()
+    this.summaryBody?.replaceChildren(table)
+  }
+
+  private createTableRow(): DocumentFragment {
     const fragmentEl = document.createDocumentFragment()
     const trEl = document.createElement('tr')
 
@@ -33,11 +38,20 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
     })
 
     fragmentEl.appendChild(trEl)
-    this.summaryBody?.replaceChildren(fragmentEl)
+
+    return fragmentEl
   }
 
   private calculateSummary(): number[] {
-    return [this.getTotalOf('quantity'), this.getTotalOf('volume')]
+    return [
+      this.getTotalOf('quantity'),
+      this.getTotalOf('volume'),
+      this.getNegotiationsTotal(),
+    ]
+  }
+
+  private getNegotiationsTotal(): number {
+    return this.negotiationList?.negotiations.length ?? 0
   }
 
   private getTotalOf(anUnity: 'volume' | 'quantity'): number {
@@ -50,12 +64,15 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
   }
 
   private createTable(): void {
-    this.summaryContainer!.innerHTML = /* html */ `
+    if (!this.summaryContainer) return
+
+    this.summaryContainer.innerHTML = /* html */ `
       <table class="table table-hover table-bordered">
         <thead>
           <tr>
             <th scope="col">QUANTIDADE TOTAL</th>
             <th scope="col">VOLUME TOTAL</th>
+            <th scope="col">TOTAL DE NEGOCIAÇÕES</th>
           </tr>
         </thead>
         <tbody>
