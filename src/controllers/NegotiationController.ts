@@ -75,7 +75,7 @@ export class NegotiationController {
     } catch (error) {
       console.log(error)
     } finally {
-      this.reset()
+      this.resetFields()
     }
   }
 
@@ -101,13 +101,13 @@ export class NegotiationController {
   private addEvents(): void {
     this.form?.addEventListener('submit', this.add)
     this.clearButton?.addEventListener('click', this.clearNegotiationList)
-    this.importButton?.addEventListener('click', this.load)
+    this.importButton?.addEventListener('click', this.importNegotiations)
   }
 
   private bindEvent(): void {
     this.add = this.add.bind(this)
     this.clearNegotiationList = this.clearNegotiationList.bind(this)
-    this.load = this.load.bind(this)
+    this.importNegotiations = this.importNegotiations.bind(this)
   }
 
   private async clearNegotiationList(): Promise<void> {
@@ -119,7 +119,7 @@ export class NegotiationController {
     }
   }
 
-  private reset(): void {
+  private resetFields(): void {
     this.inputAmount!.value = '0'
     this.inputQuantity!.value = '0.0'
     this.inputDate!.value = ''
@@ -130,35 +130,38 @@ export class NegotiationController {
   }
 
   @debounce(250)
-  private async load() {
+  private async importNegotiations(): Promise<void> {
     try {
       const { NegotiationService } = await import(
         '../domain/NegotiationService'
       )
 
-      const service = new NegotiationService(this.httpService)
+      const negotiationService = new NegotiationService(this.httpService)
 
-      const response = (await service.get()).getOrElse<IResponse>({
+      const negotiationsResponse = (
+        await negotiationService.get()
+      ).getOrElse<IResponse>({
         negotiations: [],
       })
 
       const negotiations = NegotiationsLoaderFacade.buildNegotiations(
-        response.negotiations,
+        negotiationsResponse.negotiations,
       )
 
-      if (this.hasNegotiations(negotiations)) {
-        const negotiationsFiltered =
-          this.negotiationsList.getFilteredDuplicateNegotiationsList(
-            negotiations,
-          )
-
-        negotiationsFiltered.forEach((negotiation) => this.saveDAO(negotiation))
-
-        this.negotiationsList.load(negotiations)
-      }
+      this.loadNegotiations(negotiations)
     } catch (error) {
       console.log(error)
     }
+  }
+
+  private loadNegotiations(negotiations: Negotiation[]) {
+    if (!this.hasNegotiations(negotiations)) return
+
+    const negotiationsFiltered =
+      this.negotiationsList.getFilteredDuplicateNegotiationsList(negotiations)
+
+    negotiationsFiltered.forEach((negotiation) => this.saveDAO(negotiation))
+    this.negotiationsList.load(negotiations)
   }
 
   private async saveDAO(negotiation: Negotiation) {
