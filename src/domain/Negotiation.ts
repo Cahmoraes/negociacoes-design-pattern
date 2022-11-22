@@ -81,16 +81,6 @@ export class Negotiation {
    * @returns {boolean}
    */
   public isEqual(negotiation: Negotiation): boolean {
-    // return (
-    //   this.date.getDate() === negotiation.date.getDate() &&
-    //   this.date.getMonth() === negotiation.date.getMonth() &&
-    //   this.date.getFullYear() === negotiation.date.getFullYear() &&
-    //   this.amount === negotiation.amount &&
-    //   this.quantity === negotiation.quantity
-    // )
-    console.log('--------------------------------')
-    console.log('deepStrictEqual', deepStrictEqual(this, negotiation))
-    console.log(this, negotiation)
     return deepStrictEqual(this, negotiation)
   }
 }
