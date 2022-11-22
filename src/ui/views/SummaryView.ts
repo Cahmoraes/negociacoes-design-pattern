@@ -16,7 +16,6 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
 
   public update({ data }: INegotiationListAction): void {
     this.negotiationList = data
-    console.log('this.negotiationList', this.negotiationList)
     this.createTableRow()
   }
 
@@ -24,11 +23,7 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
     const fragmentEl = document.createDocumentFragment()
     const trEl = document.createElement('tr')
 
-    ;[
-      this.getTotalOf('quantity'),
-      this.getTotalOf('volume'),
-      this.getTotalOf('volume'),
-    ].forEach((summation) => {
+    this.calculateSummary().forEach((summation) => {
       const td = document.createElement('td')
       td.textContent = summation.toString()
       trEl.appendChild(td)
@@ -38,11 +33,29 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
     this.summaryContainer?.querySelector('tbody')?.replaceChildren(fragmentEl)
   }
 
+  private calculateSummary(): number[] {
+    return [
+      this.getTotalOf('quantity'),
+      this.getTotalOf('volume'),
+      this.getTotalOf('volume'),
+      this.getVolumeTotal(),
+    ]
+  }
+
   private getTotalOf(anUnity: 'volume' | 'quantity'): number {
     if (!this.negotiationList) return 0
 
     return this.negotiationList.negotiations.reduce(
       (total, negotiation) => negotiation[anUnity] + total,
+      0,
+    )
+  }
+
+  private getVolumeTotal(): number {
+    if (!this.negotiationList) return 0
+
+    return this.negotiationList?.negotiations.reduce(
+      (total, negotiation) => total + negotiation.volume,
       0,
     )
   }
