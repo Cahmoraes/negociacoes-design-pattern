@@ -37,7 +37,6 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
     return [
       this.getTotalOf('quantity'),
       this.getTotalOf('volume'),
-      this.getTotalOf('volume'),
       this.getVolumeTotal(),
     ]
   }
