@@ -1,5 +1,5 @@
 import { NegotiationList } from '../domain'
-import { IAction } from './IAction'
+import { IAction } from '.'
 
 export enum INegotiationTypes {
   'ADD' = 'ADD',

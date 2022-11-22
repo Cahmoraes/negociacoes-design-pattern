@@ -3,7 +3,7 @@ import {
   INegotiationListAction,
   INegotiationAction,
   INegotiationTypes,
-} from '../interface/INegotiationListAction'
+} from '../interface'
 import { IIObserver } from '../interface/IObserver'
 import { eventEmitter } from '../util'
 import { Negotiation } from './Negotiation'
