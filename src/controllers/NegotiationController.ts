@@ -16,6 +16,7 @@ import {
 import { HttpService } from '../infra/HttpService'
 import { IResponse } from '../domain/interfaces'
 import { debounce } from '../util/decorators/debounce'
+import { SummaryView } from '../ui/views/SummaryView'
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT
 export class NegotiationController {
@@ -39,13 +40,15 @@ export class NegotiationController {
 
   private readonly negotiationsList: NegotiationList
   private readonly negotiationView: NegotiationView
+  private readonly summaryView: SummaryView
   private readonly messageView: MessageView
   private readonly httpService: HttpService<IResponse>
-  private negotiationDao!: NegotiationDao
+  private negotiationDao: NegotiationDao | undefined
 
   constructor() {
     this.negotiationsList = new NegotiationList()
     this.messageView = new MessageView()
+    this.summaryView = new SummaryView()
     this.httpService = new HttpService<IResponse>(API_ENDPOINT)
 
     this.negotiationView = ProxyFactory.create(
@@ -111,7 +114,7 @@ export class NegotiationController {
   private async clearNegotiationList(): Promise<void> {
     try {
       this.negotiationsList.clear()
-      await this.negotiationDao.clear()
+      await this.negotiationDao?.clear()
     } catch (error) {
       console.log(error)
     }
@@ -165,18 +168,19 @@ export class NegotiationController {
 
   private async delete(negotiation: Negotiation): Promise<void> {
     try {
-      this.negotiationDao.delete(negotiation)
+      this.negotiationDao?.delete(negotiation)
     } catch (error) {
       console.log(error)
     }
   }
 
-  private async init(): Promise<void> {
-    this.bindEvent()
-    this.addEvents()
+  private subscribeObservers(): void {
     this.negotiationsList.subscribe(this.negotiationView)
     this.negotiationsList.subscribe(this.messageView)
+    this.negotiationsList.subscribe(this.summaryView)
+  }
 
+  private async getNegotiations(): Promise<void> {
     try {
       this.negotiationDao = await DaoFactory.getNegotiationDao()
       ;(await this.negotiationDao.getAll()).map(
@@ -187,5 +191,12 @@ export class NegotiationController {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  private async init(): Promise<void> {
+    this.bindEvent()
+    this.addEvents()
+    this.subscribeObservers()
+    this.getNegotiations()
   }
 }
