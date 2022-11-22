@@ -6,7 +6,10 @@ import { NegotiationList } from '../../domain'
 
 export class SummaryView implements IIObserver<INegotiationListAction> {
   @domInjector('#sumario')
-  private readonly summaryContainer: IElement
+  private readonly summaryContainer: IElement<HTMLDivElement>
+
+  @domInjector('#sumario tbody')
+  private readonly summaryBody: IElement<HTMLTableSectionElement>
 
   private negotiationList: NegotiationList | null = null
 
@@ -30,7 +33,7 @@ export class SummaryView implements IIObserver<INegotiationListAction> {
     })
 
     fragmentEl.appendChild(trEl)
-    this.summaryContainer?.querySelector('tbody')?.replaceChildren(fragmentEl)
+    this.summaryBody?.replaceChildren(fragmentEl)
   }
 
   private calculateSummary(): number[] {
