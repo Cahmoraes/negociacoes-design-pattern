@@ -140,8 +140,6 @@ export class NegotiationController {
         negotiations: [],
       })
 
-      console.log(response)
-
       const negotiations = NegotiationsLoaderFacade.buildNegotiations(
         response.negotiations,
       )

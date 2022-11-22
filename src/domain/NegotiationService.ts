@@ -1,5 +1,6 @@
 import { IHttpService } from '../infra/HttpService/interface'
-import { Maybe } from '../util'
+// import { Maybe } from '../util'
+import { Maybe } from '@cahmoraes93/maybe'
 import { IResponse } from './interfaces'
 
 /**

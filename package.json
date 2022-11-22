@@ -28,7 +28,8 @@
   },
   "dependencies": {
     "@cahmoraes93/deep-strict-equal": "^1.0.0",
-    "miragejs": "^0.1.45",
-    "simple-immuter": "^1.2.2"
+    "@cahmoraes93/maybe": "^1.0.3",
+    "@cahmoraes93/simple-immuter": "^3.0.2",
+    "miragejs": "^0.1.45"
   }
 }

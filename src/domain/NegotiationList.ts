@@ -1,4 +1,4 @@
-import { si } from 'simple-immuter'
+import { si } from '@cahmoraes93/simple-immuter'
 import {
   INegotiationListAction,
   INegotiationAction,
