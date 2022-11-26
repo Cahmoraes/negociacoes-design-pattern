@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/negociacoes-design-pattern/sw.js', { scope: '/negociacoes-design-pattern/' })})}
